@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ics.mapper.TemplateMapper">
+	<!-- 增加Template -->
+	<insert id="addTemplate" parameterType="java.util.HashMap">
+		insert into
+		t_Template
+		(name,tablename,status)
+		values
+		(#{name},#{tablename},#{status})
+	</insert>
+	<!-- 删除Template -->
+	<delete id="delTemplate" parameterType="java.util.HashMap">
+		delete from
+		t_Template
+		where
+		<if test="id !=null and id !=''">
+		   id = #{id} 
+		</if>
+	</delete>
+	<!-- 更新Template -->
+	<update id="updateTemplate" parameterType="java.util.HashMap">
+		update
+		t_Template set status = #{status} ,tablename =#{tablename},name=#{name} where id=#{id}
+	</update>
+	<!-- 查询Template -->
+	<select id="getTemplate" resultType="java.util.HashMap">
+		select * from t_template where
+		<if test="type !=null and type !=''">
+			type=#{type}
+		</if>
+	</select>
+	<!-- 查询Template -->
+	<select id="getTableColumn" resultType="java.util.HashMap">
+		SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.columns WHERE 
+		<if test="tablename !=null and tablename !=''">
+			TABLE_NAME=#{tablename}
+		</if>
+	</select>
+</mapper>

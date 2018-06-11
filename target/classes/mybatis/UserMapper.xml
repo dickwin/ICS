@@ -1,0 +1,3363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ics.mapper.UserMapper">
+	<!-- 客户分类 -->
+	<select id="getMyClassInfo" resultType="java.lang.String">
+		select cust_class from accdiag.gfrob_customer_classinfo b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+	</select>
+	<!-- 广发通和交易账号绑定 -->
+	<select id="getMyCustId" resultType="java.lang.String">
+		select cust_id from accdiag.gfrob_cust_bind_trade_info b where 1=1
+		<if test="trade_id !=null and trade_id !=''">
+			and b.trade_id =#{trade_id}
+		</if>
+	</select>
+	<!-- 收益综合能力(我的) -->
+	<select id="getMyIncome" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_cust_comprehensivescore b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+	</select>
+	<!-- 我的收益能力 (我的) -->
+	<select id="getMyIncomePower" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_cust_period_profit b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.customer_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+	</select>
+	<!-- 其他收益能力(广发和同类客户的收益能力) -->
+	<select id="getOtherIncomePower" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_classcust_avgprofit b where 1=1
+		<if test="class_id !=null and class_id !=''">
+			and (b.class_id='0' or b.class_id =#{class_id})
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+			order by class_id desc
+	</select>
+	<!-- 收益排行前三（股票） -->
+	<select id="getIncomeStockRanking" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_stock_earnings_ranking b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+	</select>
+	<!-- 收益排行前三（行业） -->
+	<select id="getIncomeIndustryRanking" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_industry_earnings_ranking b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+	</select>
+	<!-- 收益走势 (我的)-->
+	<!--
+	<select id="getMyIncomeTrend" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_allcust_profit_info b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="begindate !=null and begindate !=''">
+			<![CDATA[
+				and	b.busidate>=#{begindate}
+			]]>
+		</if>
+		<if test="enddate !=null and enddate !=''">
+			<![CDATA[ 
+				and b.busidate<=#{enddate} 
+			]]>
+		</if>
+		order by busidate
+	</select>
+	-->
+	<!-- 收益走势(其他) -->
+	<select id="getOtherIncomeTrend" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_allcust_day_avgprofit b where 1=1
+		<if test="class_id !=null and class_id !=''">
+			and (b.class_id='0' or b.class_id='38684' or b.class_id =#{class_id})
+		</if>
+		<if test="begindate !=null and begindate !=''">
+			<![CDATA[
+				and	b.busidate>=#{begindate}
+			]]>
+		</if>
+		<if test="enddate !=null and enddate !=''">
+			<![CDATA[ 
+				and b.busidate<=#{enddate} 
+			]]>
+		</if>
+		order by busidate
+	</select>
+	<!--@收益来源 -->
+	<select id="getMyIncomeSource" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_full_asset_profit_source b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+		order by source_id
+	</select>
+	<!--收益来源其他 -->
+	<select id="getOtherIncomeSource" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_classcust_revenuesource_avg b where 1=1
+		<if test="class_id !=null and class_id !=''">
+			and (b.class_id='0' or b.class_id =#{class_id})
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+		order by class_id
+	</select>
+	<!-- 投资能力(我的) -->
+	<select id="getMyInvestmentAbility" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_cust_tznl_score b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+	</select>
+	<!-- 投资能力(其他) -->
+	<select id="getOtherInvestmentAbility" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_classcust_tznl_score_avg b where 1=1
+		<if test="class_id !=null and class_id !=''">
+			and (b.class_id='0' or b.class_id =#{class_id})
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+	</select>
+	<!-- 风控能力 -->
+	<select id="getMyRiskControl" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_cust_varmcvcl b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+	</select>
+	<!-- 风控能力（其他） -->
+	<select id="getOtherRiskControl" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_cust_rr_avg b where 1=1
+		<if test="class_id !=null and class_id !=''">
+			and (b.class_id='0' or b.class_id =#{class_id})
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+	</select>
+	<!-- 波动率（我的） -->
+	<select id="getMyFluctuationRatio" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_allcust_bdl_info b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="begindate !=null and begindate !=''">
+			<![CDATA[
+				and	b.busi_month>=#{begindate}
+			]]>
+		</if>
+		<if test="enddate !=null and enddate !=''">
+			<![CDATA[ 
+				and b.busi_month<=#{enddate} 
+			]]>
+		</if>
+		order by busi_month
+	</select>
+	<!-- 波动率（其他） -->
+	<select id="getOtherFluctuationRatio" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_allcust_bdl_avg b where 1=1
+		<if test="class_id !=null and class_id !=''">
+			and (b.class_id='0' or b.class_id =#{class_id})
+		</if>
+		<if test="begindate !=null and begindate !=''">
+			<![CDATA[
+				and	b.busi_month>=#{begindate}
+			]]>
+		</if>
+		<if test="enddate !=null and enddate !=''">
+			<![CDATA[ 
+				and b.busi_month<=#{enddate} 
+			]]>
+		</if>
+		order by busi_month
+	</select>
+	<!-- 最大回撤（我的） -->
+	<select id="getMyMaxDrawdown" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_allcust_max_drawdown b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+		<!--
+		<if test="begindate !=null and begindate !=''">
+			<![CDATA[
+				and	b.start_time>=#{begindate}
+			]]>
+		</if>
+		<if test="enddate !=null and enddate !=''">
+			<![CDATA[ 
+				and b.end_time<=#{enddate} 
+			]]>
+		</if>
+		-->
+	</select>
+	<!-- 最大回撤（其他） -->
+	<select id="getOterMaxDrawdown" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_allcust_maxdrawdown_avg b where 1=1
+		<if test="class_id !=null and class_id !=''">
+			and (b.class_id='0' or b.class_id =#{class_id})
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+	</select>
+	<!-- 投资偏好 -->
+	<select id="getInvestmentPreference" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_cust_indu_percent b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		order by indu_code
+	</select>
+	<!-- 投资风格 -->
+	<select id="getStylePreference" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_customer_style_ph b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="begindate !=null and begindate !=''">
+			<![CDATA[
+				and	b.busidate>=#{begindate}
+			]]>
+		</if>
+		<if test="enddate !=null and enddate !=''">
+			<![CDATA[ 
+				and b.busidate<=#{enddate} 
+			]]>
+		</if>
+	</select>
+	<!--客户信息整合 -->
+	<select id="getInfoByKey" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_all_data b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+	</select>
+	
+
+	<!--PC:获取股票仓位 -->
+	<select id="getStockRatio" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_customer_stock_ratio b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.customer_id =#{cust_id}
+		</if>
+	</select>
+	<!--PC:数据整合 -->
+	<select id="getPcData" resultType="java.util.HashMap">
+		select * from accdiag.gfrob_pc_all_data b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.customer_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+	</select>
+	<!-- pc:我的收益能力 (我的) -->
+	<select id="getMyIncomePowerPC" resultType="java.util.HashMap">
+		select * from 
+		(select cust_id, class_id, period_id, COALESCE(my_profit,0) my_profit, COALESCE(ce_profit,0) ce_profit,
+		row_number() over(partition by b.cust_id,b.period_id) as row_num
+		from accdiag.gfrob_all_data b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+		)z where z.row_num = 1
+	</select>
+	<!-- pc:其他收益能力(广发和同类客户的收益能力) -->
+	<select id="getOtherIncomePowerPC" resultType="java.util.HashMap">
+		select period_id, class_id, COALESCE(profit,0) profit, COALESCE(ce_profit,0) ce_profit
+		from accdiag.gfrob_classcust_avgprofit b where 1=1
+		<if test="class_id !=null and class_id !=''">
+			and (b.class_id='0' or b.class_id =#{class_id})
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+			order by class_id desc
+	</select>
+	<!-- PC:收益走势(其他) -->
+	<select id="getOtherIncomeTrendPC" resultType="java.util.HashMap">
+		select busidate,class_id,COALESCE(profit,0) profit from accdiag.gfrob_allcust_day_avgprofit b where 1=1
+		<if test="class_id !=null and class_id !=''">
+			and (b.class_id='0' or b.class_id='38684' or b.class_id =#{class_id})
+		</if>
+		<if test="begindate !=null and begindate !=''">
+			<![CDATA[
+				and	b.busidate>=#{begindate}
+			]]>
+		</if>
+		<if test="enddate !=null and enddate !=''">
+			<![CDATA[ 
+				and b.busidate<=#{enddate} 
+			]]>
+		</if>
+		order by busidate
+	</select>
+	<!-- PC:收益综合能力(我的) -->
+	<select id="getMyIncomePC" resultType="java.util.HashMap">
+		select b.cust_id, b.period_id, b.class_id, COALESCE(b.synl,0) synl, COALESCE(b.fknl,0) fknl, COALESCE(b.tznl,0) tznl, COALESCE(b.zhnl,0) zhnl
+		from accdiag.gfrob_all_data b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+	</select>
+	<!-- PC:收益来源 -->
+	<select id="getMyIncomeSourcePC" resultType="java.util.HashMap">
+		select cust_id, period_id, source_id, source, COALESCE(prd_earnings,0) prd_earnings
+		from accdiag.gfrob_all_data b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+		order by source_id
+	</select>
+	<!--PC:收益来源(其他) -->
+	<select id="getOtherIncomeSourcePC" resultType="java.util.HashMap">
+		select period_id, class_id, trd_type, profit_amt_avg
+		from accdiag.gfrob_classcust_revenuesource_avg b where 1=1
+		<if test="class_id !=null and class_id !=''">
+			and (b.class_id='0' or b.class_id =#{class_id})
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+		order by class_id
+	</select>
+	<!--PC:投资能力 -->
+	<select id="getInvestAbilityPC" resultType="java.util.HashMap">
+		select cust_id, period_id, class_id, COALESCE(cesl_score,0) cesl_score, COALESCE(jgnl_score,0) jgnl_score,
+		COALESCE(fynl_score,0) fynl_score, COALESCE(zsnl_score,0) zsnl_score, COALESCE(zgnl_score,0) zgnl_score,
+		COALESCE(tznl_score,0) tznl_score
+		from accdiag.gfrob_all_data b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+		order by class_id
+	</select>
+	<!--PC:投资能力(同类/广发) -->
+	<select id="getInvestAbilityAvgPC" resultType="java.util.HashMap">
+		select period_id, class_id, COALESCE(cesl,0) cesl, COALESCE(jgnl,0) jgnl,
+		COALESCE(fynl,0) fynl, COALESCE(zsnl,0) zsnl, COALESCE(zgnl,0) zgnl,
+		COALESCE(tznl,0) tznl
+		from accdiag.gfrob_classcust_tznl_score_avg b where 1=1
+		<if test="class_id !=null and class_id !=''">
+			and (b.class_id='0' or b.class_id =#{class_id})
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+	</select>
+	<!--PC:风险收益比 -->
+	<select id="getRiskProfitRatioPC" resultType="java.util.HashMap">
+		select cust_id, period_id, class_id, COALESCE(rr_val,0) rr_val
+		from accdiag.gfrob_all_data b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+		order by class_id
+	</select>
+	<!--PC:风险收益比(同类/广发) -->
+	<select id="getRiskProfitRatioAvgPC" resultType="java.util.HashMap">
+		select period_id, class_id, COALESCE(rr_val, 0) rr_val
+		from accdiag.gfrob_cust_rr_avg b where 1=1
+		<if test="class_id !=null and class_id !=''">
+			and (b.class_id='0' or b.class_id =#{class_id})
+		</if>
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period}
+		</if>
+	</select>
+	<!-- PC:收益排行 -->
+	<select id="getEarningPower" resultType="java.util.HashMap">
+		select * from 
+		(select b.cust_id, b.period_id, b.class_id, COALESCE((100-b.synl),0) synl, row_number() over (partition by period_id order by period_id desc)as row
+		from accdiag.gfrob_all_data b where 1=1
+		<if test="cust_id !=null and cust_id !=''">
+			and b.cust_id =#{cust_id}
+		</if>)z where z.row = 1
+	</select>
+	<!-- 获取行业列表 -->
+	<select id="getInduList" resultType="java.util.HashMap">
+		select * from accdiag.bg_b_bas_sect_info b where 1=1 and b.std_code = '10' and b.is_valid = '1'
+	</select>	
+
+	<!-- PC:客户筛选测试 -->
+	<select id="getUserListTestTest" resultType="java.util.HashMap">
+		select * from
+		(select cust_id, class_id, period_id,row_number() over (order by cust_id asc)as row from
+		(select b.cust_id, b.class_id, b.period_id, j.indu_name,
+		row_number() over (partition by b.cust_id) as row_num
+		from accdiag.gfrob_all_data b 
+		left join accdiag.gfrob_pc_all_data a on a.customer_id = b.cust_id and a.period_id = b.period_id
+		left join accdiag.gfrob_customer_stock_ratio c on b.cust_id = c.customer_id
+		left join accdiag.gfrob_classcust_avgprofit e on  b.class_id = e.class_id  and  b.period_id = e.period_id 
+	    left join (select f.* from (select *,row_number() over (partition by cust_id order by busidate desc) as row_num from accdiag.gfrob_customer_style_ph)f where f.row_num = 1)g on g.cust_id = b.cust_id
+		left join accdiag.gfrob_cust_indu_percent j on j.cust_id = b.cust_id
+		left join accdiag.gfrob_allcust_max_drawdown k on k.cust_id = b.cust_id and k.period_id = b.period_id
+		where 1=1
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period} 
+		</if>
+		<!-- 周期收益 -->	
+		<if test="max_my_profit !=null"  >
+			<![CDATA[
+				and #{max_my_profit} >= b.my_profit
+			]]>
+		</if>		
+		<if test="min_my_profit !=null"  >
+			<![CDATA[
+				and #{min_my_profit} <= b.my_profit
+			]]>
+		</if>
+		<!-- 进攻能力 -->
+		<if test="max_jgnl_score !=null"  >
+			<![CDATA[
+				and #{max_jgnl_score} >= b.jgnl_score
+			]]>
+		</if>		
+		<if test="min_jgnl_score !=null"  >
+			<![CDATA[
+				and #{min_jgnl_score} <= b.jgnl_score
+			]]>
+		</if>
+		<!-- 防御能力 -->
+		<if test="max_fynl_score !=null"  >
+			<![CDATA[
+				and #{max_fynl_score} >= b.fynl_score
+			]]>
+		</if>		
+		<if test="min_fynl_score !=null"  >
+			<![CDATA[
+				and #{min_fynl_score} <= b.fynl_score
+			]]>
+		</if>
+		<!-- alpha指标 -->
+		<if test="max_alpha_val !=null"  >
+			<![CDATA[
+				and #{max_alpha_val} >= b.alpha_val
+			]]>
+		</if>		
+		<if test="min_alpha_val !=null"  >
+			<![CDATA[
+				and #{min_alpha_val} <= b.alpha_val
+			]]>
+		</if>		
+		<!-- beta指标 -->		
+		<if test="max_beta_val !=null"  >
+			<![CDATA[
+				and #{max_beta_val} >= b.beta_val
+			]]>
+		</if>		
+		<if test="min_beta_val !=null"  >
+			<![CDATA[
+				and #{min_beta_val} <= b.beta_val
+			]]>
+		</if>
+		<!-- 择时能力 -->
+		<if test="max_zsnl_score !=null"  >
+			<![CDATA[
+				and #{max_zsnl_score} >= b.zsnl_score
+			]]>
+		</if>		
+		<if test="min_zsnl_score !=null"  >
+			<![CDATA[
+				and #{min_zsnl_score} <= b.zsnl_score
+			]]>
+		</if>
+		<!-- 择股能力 -->
+		<if test="max_zgnl_score !=null"  >
+			<![CDATA[
+				and #{max_zgnl_score} >= b.zgnl_score
+			]]>
+		</if>		
+		<if test="min_zgnl_score !=null"  >
+			<![CDATA[
+				and #{min_zgnl_score} <= b.zgnl_score
+			]]>
+		</if>		
+		<!-- var指标 -->
+		<if test="max_var_val !=null"  >
+			<![CDATA[
+				and #{max_var_val} >= b.var_val
+			]]>
+		</if>	
+		<if test="min_var_val !=null and min_var_val !='' or min_var_val == 0"  >
+			<![CDATA[
+				and #{min_var_val} <= b.var_val
+			]]>
+		</if>	
+		<!-- 同类客户平均收益 -->
+		<if test="max_my_profit_avg !=null"  >
+			<![CDATA[
+				and #{max_my_profit_avg} >= e.profit
+			]]>
+		</if>		
+		<if test="min_my_profit_avg !=null"  >
+			<![CDATA[
+				and #{min_my_profit_avg} <= e.profit
+			]]>
+		</if>		
+		<!-- 同类客户超额收益 -->
+		<if test="max_ce_profit_avg !=null"  >
+			<![CDATA[
+				and #{max_ce_profit_avg} >= e.ce_profit
+			]]>
+		</if>		
+		<if test="min_ce_profit_avg !=null"  >
+			<![CDATA[
+				and #{min_ce_profit_avg} <= e.ce_profit
+			]]>
+		</if>			
+		<!-- 超额胜率 -->
+		<if test="max_cesl_score !=null"  >
+			<![CDATA[
+				and #{max_cesl_score} >= b.cesl_score
+			]]>
+		</if>		
+		<if test="min_cesl_score !=null"  >
+			<![CDATA[
+				and #{min_cesl_score} <= b.cesl_score
+			]]>
+		</if>
+		<!-- 风格偏好：大盘中盘小盘 -->
+		<if test="ptype !=null and ptype !=''">
+			and g.ptype = #{ptype}
+		</if>
+		<!-- 风格偏好：成长平衡 -->
+		<if test="ftype !=null and ftype !=''">
+			and g.ftype = #{ftype}
+		</if>
+		<!-- 大类收益：股票/债券/基金 -->		
+	    <if test="profit_source !=null and profit_source !=''">
+			and b.source_id = #{profit_source}
+		</if>
+		<!-- 个股查询 -->
+		<if test="prd_name !=null and prd_name !=''">
+			and (b.prd_name1 like #{prd_name} or
+				 b.prd_name2 like #{prd_name} or
+				 b.prd_name3 like #{prd_name} or
+				 b.prd_name4 like #{prd_name} or
+				 b.prd_name5 like #{prd_name} )
+		</if>
+		<!-- 行业占比 -->
+		<!--  
+		<if test="indu_code !=null and indu_code !=''">
+			and j.indu_code = #{indu_code}
+		</if> -->
+		<if test="indu_code !=null and indu_code.size() > 0">
+			and j.indu_code in
+        	<foreach item="indu_code" index="index" collection="indu_code" open="(" separator="," close=")">
+             	#{indu_code}
+        	</foreach>
+        </if>
+        <!-- 客户类型 -->
+		<if test="class_id !=null and class_id.size() > 0">
+			and b.class_id in
+			<foreach item="class_id" index="index" collection="class_id" open="(" separator="," close=")">
+             	#{class_id}
+        	</foreach>
+		</if>
+		<!-- 行业查询 -->
+		<if test="industry_prd !=null and industry_prd !=''">
+			and (b.industry_prd1 = #{industry_prd} or
+				 b.industry_prd2 = #{industry_prd} or
+				 b.industry_prd3 = #{industry_prd} or
+				 b.industry_prd4 = #{industry_prd} or
+				 b.industry_prd5 = #{industry_prd})
+		</if>
+		<!-- 最大回撤 -->
+		<if test="max_max_drawdown !=null"  >
+			<![CDATA[
+				and #{max_max_drawdown} >= k.max_drawdown
+			]]>
+		</if>		
+		<if test="min_max_drawdown !=null"  >
+			<![CDATA[
+				and #{min_max_drawdown} <= k.max_drawdown
+			]]>
+		</if>
+		<!-- 超额收益 -->
+		<if test="max_ce_profit !=null"  >
+			<![CDATA[
+				and #{max_ce_profit} >= b.ce_profit
+			]]>
+		</if>		
+		<if test="min_ce_profit !=null"  >
+			<![CDATA[
+				and #{min_ce_profit} <= b.ce_profit
+			]]>
+		</if>
+		
+		<!-- 盈利次数 -->
+		<if test="max_profit_num !=null">
+			<![CDATA[
+				and #{max_profit_num} >= a.profit_num
+			]]>
+		</if>
+		<if test="min_profit_num !=null">
+			<![CDATA[
+				and a.profit_num >= #{min_profit_num}
+			]]>
+		</if>
+		<!-- 亏损次数 -->
+		<if test="max_deficit_num !=null">
+			<![CDATA[
+				and #{max_deficit_num} >= a.deficit_num
+			]]>
+		</if>
+		<if test="min_deficit_num !=null">
+			<![CDATA[
+				and a.deficit_num >= #{min_deficit_num}
+			]]>
+		</if>
+		<!-- 盈利金额 -->
+		<if test="max_profit_balance !=null">
+			<![CDATA[
+				and #{max_profit_balance} >= a.profit_balance
+			]]>
+		</if>
+		<if test="min_profit_balance !=null">
+			<![CDATA[
+				and a.profit_balance >= #{min_profit_balance}
+			]]>
+		</if>
+		<!-- 亏损金额 -->
+		<if test="max_deficit_balance !=null">
+			<![CDATA[
+				and #{max_deficit_balance} >= a.deficit_balance
+			]]>
+		</if>
+		<if test="min_deficit_balance !=null">
+			<![CDATA[
+				and a.deficit_balance >= #{min_deficit_balance}
+			]]>
+		</if>
+		<!-- 夏普比率 -->
+		<if test="max_sharpe_val !=null">
+			<![CDATA[
+				and #{max_sharpe_val} >= a.sharpe_val
+			]]>
+		</if>
+		<if test="min_sharpe_val !=null">
+			<![CDATA[
+				and a.sharpe_val >= #{min_sharpe_val}
+			]]>
+		</if>
+		<!-- 信息收益比 -->
+		<if test="max_info_val !=null">
+			<![CDATA[
+				and #{max_info_val} >= a.info_val
+			]]>
+		</if>
+		<if test="min_info_val !=null">
+			<![CDATA[
+				and a.info_val >= #{min_info_val}
+			]]>
+		</if>
+		<!-- 下行风险 -->
+		<if test="max_downside_risk !=null">
+			<![CDATA[
+				and #{max_downside_risk} >= a.downside_risk
+			]]>
+		</if>
+		<if test="min_downside_risk !=null">
+			<![CDATA[
+				and a.downside_risk >= #{min_downside_risk}
+			]]>
+		</if>
+		<!-- 净值增长率 -->
+		<if test="max_net_worth_uprate !=null">
+			<![CDATA[
+				and #{max_net_worth_uprate} >= a.net_worth_uprate
+			]]>
+		</if>
+		<if test="min_net_worth_uprate !=null">
+			<![CDATA[
+				and a.net_worth_uprate >= #{min_net_worth_uprate}
+			]]>
+		</if> 
+		<!-- 净值增长率标准差 -->
+		<if test="max_networth_uprate_stdev !=null">
+			<![CDATA[
+				and #{max_networth_uprate_stdev} >= a.networth_uprate_stdev
+			]]>
+		</if>
+		<if test="min_networth_uprate_stdev !=null">
+			<![CDATA[
+				and a.networth_uprate_stdev >= #{max_networth_uprate_stdev}
+			]]>
+		</if> 
+		<!-- 卖出盈利率 -->
+		<if test="max_sell_earnings_val !=null">
+			<![CDATA[
+				and #{max_sell_earnings_val} >= a.sell_earnings_val
+			]]>
+		</if>
+		<if test="min_sell_earnings_val !=null">
+			<![CDATA[
+				and a.sell_earnings_val >= #{min_sell_earnings_val}
+			]]>
+		</if> 		
+		<!--交易胜率 -->
+		<if test="max_exchange_winratio !=null">
+			<![CDATA[
+				and #{max_exchange_winratio} >= a.exchange_winratio
+			]]>
+		</if>
+		<if test="min_exchange_winratio !=null">
+			<![CDATA[
+				and a.exchange_winratio >= #{min_exchange_winratio}
+			]]>
+		</if> 		
+		<!--股票仓位 -->
+		<if test="max_stock_ratio !=null">
+			<![CDATA[
+				and #{max_stock_ratio} >= c.stock_ratio
+			]]>
+		</if>
+		<if test="min_stock_ratio !=null">
+			<![CDATA[
+				and c.stock_ratio >= #{min_stock_ratio}
+			]]>
+		</if> 	
+		<!-- 交易次数 -->
+		<if test="max_exchange_num !=null">
+			<![CDATA[
+				and #{max_exchange_num} >= a.exchange_num
+			]]>
+		</if>
+		<if test="min_exchange_num !=null">
+			<![CDATA[
+				and a.exchange_num >= #{min_exchange_num}
+			]]>
+		</if> 	
+		<!-- 交易换手率 -->
+		<if test="max_exchange_ratio !=null">
+			<![CDATA[
+				and #{max_exchange_ratio} >= a.exchange_ratio
+			]]>
+		</if>
+		<if test="min_exchange_ratio !=null">
+			<![CDATA[
+				and a.exchange_ratio >= #{min_exchange_ratio}
+			]]>
+		</if>			
+		<!-- 集中度(股票只数) -->
+		<if test="max_stock_num !=null">
+			<![CDATA[
+				and #{max_stock_num} >= a.stock_num
+			]]>
+		</if>
+		<if test="min_stock_num !=null">
+			<![CDATA[
+				and a.stock_num >= #{min_stock_num}
+			]]>
+		</if>		
+		<!-- 平均持仓时长 -->
+		<if test="max_stock_day_avg !=null">
+			<![CDATA[
+				and #{max_stock_day_avg} >= a.stock_day_avg
+			]]>
+		</if>
+		<if test="min_stock_day_avg !=null">
+			<![CDATA[
+				and a.stock_day_avg >= #{min_stock_day_avg}
+			]]>
+		</if>			
+		<!-- 回撤恢复时间 -->
+		<if test="max_daynum !=null">
+			<![CDATA[
+				and #{max_daynum} >= a.daynum
+			]]>
+		</if>
+		<if test="min_daynum !=null">
+			<![CDATA[
+				and a.daynum >= #{min_daynum}
+			]]>
+		</if>			
+						
+		order by b.cust_id asc 
+		<![CDATA[
+			)z 
+		where z.row_num < 2
+		)tt
+		where tt.row > #{page}
+		limit 20;
+		]]>	
+		
+	</select>
+	<!-- 客户列表 -->
+	<select id="getUserList" resultType="java.util.HashMap">
+		select * from
+		(select Profit_num,deficit_num,Profit_balance,deficit_balance,cust_id, class_id, period_id,row_number() over (order by cust_id asc)as row from
+		(select b.cust_id, b.class_id, b.period_id,COALESCE(a.profit_num,0) Profit_num,COALESCE(a.deficit_num,0) deficit_num,COALESCE(a.Profit_balance,0) Profit_balance,COALESCE(a.deficit_balance,0) deficit_balance,
+		row_number() over (partition by b.cust_id) as row_num
+		from accdiag.gfrob_all_data b 
+		left join accdiag.gfrob_pc_all_data a on a.customer_id = b.cust_id and a.period_id = b.period_id	
+		<!-- 波动率:accdiag.gfrob_allcust_period_bdl -->	
+		<if test="max_my_bdl !=null and min_my_bdl !=null">
+		join (select * from accdiag.gfrob_allcust_period_bdl where 1=1 
+			<if test="max_my_bdl !=null">
+				<![CDATA[
+					and #{max_my_bdl} >= my_bdl
+				]]>
+			</if>
+			<if test="min_my_bdl !=null">
+				<![CDATA[
+					and my_bdl >= #{min_my_bdl}
+				]]>
+			</if> 		
+		)cc on b.cust_id = cc.cust_id
+		</if>
+		<!-- 股票仓位:accdiag.gfrob_customer_stock_ratio -->	
+		<if test="max_stock_ratio !=null and min_stock_ratio !=null">
+		join (select * from accdiag.gfrob_customer_stock_ratio where 1=1 
+			<if test="max_stock_ratio !=null">
+				<![CDATA[
+					and #{max_stock_ratio} >= stock_ratio
+				]]>
+			</if>
+			<if test="min_stock_ratio !=null">
+				<![CDATA[
+					and stock_ratio >= #{min_stock_ratio}
+				]]>
+			</if> 		
+		)c on b.cust_id = c.customer_id
+		</if>
+		<!-- 平均收益：accdiag.gfrob_classcust_avgprofit -->
+		<if test="(max_my_profit_avg !=null and min_my_profit_avg !=null) or (max_ce_profit_avg !=null and min_ce_profit_avg !=null)"  >
+			left join (select * from accdiag.gfrob_classcust_avgprofit where 1=1
+			<if test="period !=null and period !=''">
+				and period_id =#{period} 
+			</if>
+			<if test="max_my_profit_avg !=null"  >
+				<![CDATA[
+				and #{max_my_profit_avg} >= profit
+				]]>
+			</if>		
+			<if test="min_my_profit_avg !=null"  >
+				<![CDATA[
+				and #{min_my_profit_avg} <= profit
+				]]>
+			</if>		
+			<if test="max_ce_profit_avg !=null"  >
+				<![CDATA[
+				and #{max_ce_profit_avg} >= ce_profit
+				]]>
+			</if>		
+			<if test="min_ce_profit_avg !=null"  >
+				<![CDATA[
+				and #{min_ce_profit_avg} <= ce_profit
+				]]>
+			</if>)e on  b.class_id = e.class_id  and  b.period_id = e.period_id
+		</if>
+		<!-- 风格偏好：gfrob_customer_style_ph -->
+		<if test="(ptype !=null and ptype !='') or (ftype !=null and ftype !='')">
+		join (select gg.* from (select f.* from (select *,row_number() over (partition by cust_id order by busidate desc) as row_num from accdiag.gfrob_customer_style_ph)f where f.row_num = 1)gg
+			 where 1=1 
+			<if test="ptype !=null and ptype !=''">
+				and ptype = #{ptype}
+			</if>
+			<if test="ftype !=null and ftype !=''">
+				and ftype = #{ftype}
+			</if>
+			 )g on g.cust_id = b.cust_id
+		</if>
+		<!-- 行业占比：accdiag.gfrob_cust_indu_percent -->
+		<if test="indu_code !=null and indu_code.size() > 0">
+		left join (select * from accdiag.gfrob_cust_indu_percent where 1=1
+			and j.indu_code in
+        	<foreach item="indu_code" index="index" collection="indu_code" open="(" separator="," close=")">
+             	#{indu_code}
+        	</foreach>)j on j.cust_id = b.cust_id
+        </if>
+        <!-- 最大回撤：gfrob_allcust_max_drawdown -->
+		<if test="max_max_drawdown !=null and min_max_drawdown !=null"  >
+		join (select * from accdiag.gfrob_allcust_max_drawdown where 1=1
+			<if test="period !=null and period !=''">
+				and period_id =#{period} 
+			</if>  
+			<!-- 最大回撤 -->
+			<if test="max_max_drawdown !=null"  >
+				<![CDATA[
+					and #{max_max_drawdown} >= max_drawdown
+				]]>
+			</if>		
+			<if test="min_max_drawdown !=null"  >
+				<![CDATA[
+					and #{min_max_drawdown} <= max_drawdown
+				]]>
+			</if>)k on k.cust_id = b.cust_id and k.period_id = b.period_id
+		</if>
+		where 1=1
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period} 
+		</if>
+		<!-- 周期收益 -->	
+		<if test="max_my_profit !=null"  >
+			<![CDATA[
+				and #{max_my_profit} >= b.my_profit
+			]]>
+		</if>		
+		<if test="min_my_profit !=null"  >
+			<![CDATA[
+				and #{min_my_profit} <= b.my_profit
+			]]>
+		</if>
+		<!-- 进攻能力 -->
+		<if test="max_jgnl_score !=null"  >
+			<![CDATA[
+				and #{max_jgnl_score} >= b.jgnl_score
+			]]>
+		</if>		
+		<if test="min_jgnl_score !=null"  >
+			<![CDATA[
+				and #{min_jgnl_score} <= b.jgnl_score
+			]]>
+		</if>
+		<!-- 防御能力 -->
+		<if test="max_fynl_score !=null"  >
+			<![CDATA[
+				and #{max_fynl_score} >= b.fynl_score
+			]]>
+		</if>		
+		<if test="min_fynl_score !=null"  >
+			<![CDATA[
+				and #{min_fynl_score} <= b.fynl_score
+			]]>
+		</if>
+		<!-- alpha指标 -->
+		<if test="max_alpha_val !=null"  >
+			<![CDATA[
+				and #{max_alpha_val} >= b.alpha_val
+			]]>
+		</if>		
+		<if test="min_alpha_val !=null"  >
+			<![CDATA[
+				and #{min_alpha_val} <= b.alpha_val
+			]]>
+		</if>		
+		<!-- beta指标 -->		
+		<if test="max_beta_val !=null"  >
+			<![CDATA[
+				and #{max_beta_val} >= b.beta_val
+			]]>
+		</if>		
+		<if test="min_beta_val !=null"  >
+			<![CDATA[
+				and #{min_beta_val} <= b.beta_val
+			]]>
+		</if>
+		<!-- 择时能力 -->
+		<if test="max_zsnl_score !=null"  >
+			<![CDATA[
+				and #{max_zsnl_score} >= b.zsnl_score
+			]]>
+		</if>		
+		<if test="min_zsnl_score !=null"  >
+			<![CDATA[
+				and #{min_zsnl_score} <= b.zsnl_score
+			]]>
+		</if>
+		<!-- 择股能力 -->
+		<if test="max_zgnl_score !=null"  >
+			<![CDATA[
+				and #{max_zgnl_score} >= b.zgnl_score
+			]]>
+		</if>		
+		<if test="min_zgnl_score !=null"  >
+			<![CDATA[
+				and #{min_zgnl_score} <= b.zgnl_score
+			]]>
+		</if>		
+		<!-- var指标 -->
+		<if test="max_var_val !=null"  >
+			<![CDATA[
+				and #{max_var_val} >= b.var_val
+			]]>
+		</if>	
+		<if test="min_var_val !=null and min_var_val !='' or min_var_val == 0"  >
+			<![CDATA[
+				and #{min_var_val} <= b.var_val
+			]]>
+		</if>			
+		<!-- 超额胜率 -->
+		<if test="max_cesl_score !=null"  >
+			<![CDATA[
+				and #{max_cesl_score} >= b.cesl_score
+			]]>
+		</if>		
+		<if test="min_cesl_score !=null"  >
+			<![CDATA[
+				and #{min_cesl_score} <= b.cesl_score
+			]]>
+		</if>
+		<!-- 大类收益：股票/债券/基金 -->		
+	    <if test="profit_source !=null and profit_source !=''">
+			and b.source_id = #{profit_source}
+		</if>
+		<!-- 个股查询 -->
+		<if test="prd_name !=null and prd_name !=''">
+			and (b.prd_name1 like #{prd_name} or
+				 b.prd_name2 like #{prd_name} or
+				 b.prd_name3 like #{prd_name} or
+				 b.prd_name4 like #{prd_name} or
+				 b.prd_name5 like #{prd_name} )
+		</if>
+        <!-- 客户类型 -->
+		<if test="class_id !=null and class_id.size() > 0">
+			and b.class_id in
+			<foreach item="class_id" index="index" collection="class_id" open="(" separator="," close=")">
+             	#{class_id}
+        	</foreach>
+		</if>
+		<!-- 行业查询 -->
+		<if test="industry_prd !=null and industry_prd !=''">
+			and (b.industry_prd1 = #{industry_prd} or
+				 b.industry_prd2 = #{industry_prd} or
+				 b.industry_prd3 = #{industry_prd} or
+				 b.industry_prd4 = #{industry_prd} or
+				 b.industry_prd5 = #{industry_prd})
+		</if>
+		<!-- 超额收益 -->
+		<if test="max_ce_profit !=null"  >
+			<![CDATA[
+				and #{max_ce_profit} >= b.ce_profit
+			]]>
+		</if>		
+		<if test="min_ce_profit !=null"  >
+			<![CDATA[
+				and #{min_ce_profit} <= b.ce_profit
+			]]>
+		</if>
+		
+		<!-- 盈利次数 -->
+		<if test="max_profit_num !=null">
+			<![CDATA[
+				and #{max_profit_num} >= a.profit_num
+			]]>
+		</if>
+		<if test="min_profit_num !=null">
+			<![CDATA[
+				and a.profit_num >= #{min_profit_num}
+			]]>
+		</if>
+		<!-- 亏损次数 -->
+		<if test="max_deficit_num !=null">
+			<![CDATA[
+				and #{max_deficit_num} >= a.deficit_num
+			]]>
+		</if>
+		<if test="min_deficit_num !=null">
+			<![CDATA[
+				and a.deficit_num >= #{min_deficit_num}
+			]]>
+		</if>
+		<!-- 盈利金额 -->
+		<if test="max_profit_balance !=null">
+			<![CDATA[
+				and #{max_profit_balance} >= a.profit_balance
+			]]>
+		</if>
+		<if test="min_profit_balance !=null">
+			<![CDATA[
+				and a.profit_balance >= #{min_profit_balance}
+			]]>
+		</if>
+		<!-- 亏损金额 -->
+		<if test="max_deficit_balance !=null">
+			<![CDATA[
+				and #{max_deficit_balance} >= a.deficit_balance
+			]]>
+		</if>
+		<if test="min_deficit_balance !=null">
+			<![CDATA[
+				and a.deficit_balance >= #{min_deficit_balance}
+			]]>
+		</if>
+		<!-- 夏普比率 -->
+		<if test="max_sharpe_val !=null">
+			<![CDATA[
+				and #{max_sharpe_val} >= a.sharpe_val
+			]]>
+		</if>
+		<if test="min_sharpe_val !=null">
+			<![CDATA[
+				and a.sharpe_val >= #{min_sharpe_val}
+			]]>
+		</if>
+		<!-- 信息收益比 -->
+		<if test="max_info_val !=null">
+			<![CDATA[
+				and #{max_info_val} >= a.info_val
+			]]>
+		</if>
+		<if test="min_info_val !=null">
+			<![CDATA[
+				and a.info_val >= #{min_info_val}
+			]]>
+		</if>
+		<!-- 下行风险 -->
+		<if test="max_downside_risk !=null">
+			<![CDATA[
+				and #{max_downside_risk} >= a.downside_risk
+			]]>
+		</if>
+		<if test="min_downside_risk !=null">
+			<![CDATA[
+				and a.downside_risk >= #{min_downside_risk}
+			]]>
+		</if>
+		<!-- 净值增长率 -->
+		<if test="max_net_worth_uprate !=null">
+			<![CDATA[
+				and #{max_net_worth_uprate} >= a.net_worth_uprate
+			]]>
+		</if>
+		<if test="min_net_worth_uprate !=null">
+			<![CDATA[
+				and a.net_worth_uprate >= #{min_net_worth_uprate}
+			]]>
+		</if> 
+		<!-- 净值增长率标准差 -->
+		<if test="max_networth_uprate_stdev !=null">
+			<![CDATA[
+				and #{max_networth_uprate_stdev} >= a.networth_uprate_stdev
+			]]>
+		</if>
+		<if test="min_networth_uprate_stdev !=null">
+			<![CDATA[
+				and a.networth_uprate_stdev >= #{max_networth_uprate_stdev}
+			]]>
+		</if> 
+		<!-- 卖出盈利率 -->
+		<if test="max_sell_earnings_val !=null">
+			<![CDATA[
+				and #{max_sell_earnings_val} >= a.sell_earnings_val
+			]]>
+		</if>
+		<if test="min_sell_earnings_val !=null">
+			<![CDATA[
+				and a.sell_earnings_val >= #{min_sell_earnings_val}
+			]]>
+		</if> 		
+		<!--交易胜率 -->
+		<if test="max_exchange_winratio !=null">
+			<![CDATA[
+				and #{max_exchange_winratio} >= a.exchange_winratio
+			]]>
+		</if>
+		<if test="min_exchange_winratio !=null">
+			<![CDATA[
+				and a.exchange_winratio >= #{min_exchange_winratio}
+			]]>
+		</if> 		
+		<!-- 交易次数 -->
+		<if test="max_exchange_num !=null">
+			<![CDATA[
+				and #{max_exchange_num} >= a.exchange_num
+			]]>
+		</if>
+		<if test="min_exchange_num !=null">
+			<![CDATA[
+				and a.exchange_num >= #{min_exchange_num}
+			]]>
+		</if> 	
+		<!-- 交易换手率 -->
+		<if test="max_exchange_ratio !=null">
+			<![CDATA[
+				and #{max_exchange_ratio} >= a.exchange_ratio
+			]]>
+		</if>
+		<if test="min_exchange_ratio !=null">
+			<![CDATA[
+				and a.exchange_ratio >= #{min_exchange_ratio}
+			]]>
+		</if>			
+		<!-- 集中度(股票只数) -->
+		<if test="max_stock_num !=null">
+			<![CDATA[
+				and #{max_stock_num} >= a.stock_num
+			]]>
+		</if>
+		<if test="min_stock_num !=null">
+			<![CDATA[
+				and a.stock_num >= #{min_stock_num}
+			]]>
+		</if>		
+		<!-- 平均持仓时长 -->
+		<if test="max_stock_day_avg !=null">
+			<![CDATA[
+				and #{max_stock_day_avg} >= a.stock_day_avg
+			]]>
+		</if>
+		<if test="min_stock_day_avg !=null">
+			<![CDATA[
+				and a.stock_day_avg >= #{min_stock_day_avg}
+			]]>
+		</if>			
+		<!-- 回撤恢复时间 -->
+		<if test="max_daynum !=null">
+			<![CDATA[
+				and #{max_daynum} >= a.daynum
+			]]>
+		</if>
+		<if test="min_daynum !=null">
+			<![CDATA[
+				and a.daynum >= #{min_daynum}
+			]]>
+		</if>			
+						
+		order by b.cust_id asc 
+		<![CDATA[
+			)z 
+		where z.row_num < 2
+		)tt
+		where tt.row > #{page}
+		limit 5;
+		]]>	
+		
+	</select>
+	
+	<!-- 客户数目 -->
+	<select id="getUserListNum" resultType="java.util.HashMap">
+		select count(cust_id) from
+		(select distinct(cust_id)
+		from  accdiag.gfrob_all_data b 
+		left join accdiag.gfrob_pc_all_data a on a.customer_id = b.cust_id and a.period_id = b.period_id 
+		<!-- 股票仓位:accdiag.gfrob_customer_stock_ratio -->	
+		<if test="max_stock_ratio !=null and min_stock_ratio !=null">
+		join (select * from accdiag.gfrob_customer_stock_ratio where 1=1 
+			<if test="max_stock_ratio !=null">
+				<![CDATA[
+					and #{max_stock_ratio} >= stock_ratio
+				]]>
+			</if>
+			<if test="min_stock_ratio !=null">
+				<![CDATA[
+					and stock_ratio >= #{min_stock_ratio}
+				]]>
+			</if> 		
+		)c on b.cust_id = c.customer_id
+		</if>
+		<!-- 平均收益：accdiag.gfrob_classcust_avgprofit -->
+		<if test="(max_my_profit_avg !=null and min_my_profit_avg !=null) or (max_ce_profit_avg !=null and min_ce_profit_avg !=null)"  >
+			left join (select * from accdiag.gfrob_classcust_avgprofit where 1=1
+			<if test="period !=null and period !=''">
+				and period_id =#{period} 
+			</if>
+			<if test="max_my_profit_avg !=null"  >
+				<![CDATA[
+				and #{max_my_profit_avg} >= profit
+				]]>
+			</if>		
+			<if test="min_my_profit_avg !=null"  >
+				<![CDATA[
+				and #{min_my_profit_avg} <= profit
+				]]>
+			</if>		
+			<if test="max_ce_profit_avg !=null"  >
+				<![CDATA[
+				and #{max_ce_profit_avg} >= ce_profit
+				]]>
+			</if>		
+			<if test="min_ce_profit_avg !=null"  >
+				<![CDATA[
+				and #{min_ce_profit_avg} <= ce_profit
+				]]>
+			</if>)e on  b.class_id = e.class_id  and  b.period_id = e.period_id
+		</if>
+		<!-- 风格偏好：gfrob_customer_style_ph -->
+		<if test="(ptype !=null and ptype !='') or (ftype !=null and ftype !='')">
+		join (select gg.* from (select f.* from (select *,row_number() over (partition by cust_id order by busidate desc) as row_num from accdiag.gfrob_customer_style_ph)f where f.row_num = 1)gg
+			 where 1=1 
+			<if test="ptype !=null and ptype !=''">
+				and ptype = #{ptype}
+			</if>
+			<if test="ftype !=null and ftype !=''">
+				and ftype = #{ftype}
+			</if>
+			 )g on g.cust_id = b.cust_id
+		</if>
+		<!-- 行业占比：accdiag.gfrob_cust_indu_percent -->
+		<if test="indu_code !=null and indu_code.size() > 0">
+		join (select * from accdiag.gfrob_cust_indu_percent where 1=1
+			and j.indu_code in
+        	<foreach item="indu_code" index="index" collection="indu_code" open="(" separator="," close=")">
+             	#{indu_code}
+        	</foreach>)j on j.cust_id = b.cust_id
+        </if>
+        <!-- 最大回撤：gfrob_allcust_max_drawdown -->
+		<if test="max_max_drawdown !=null and min_max_drawdown !=null"  >
+		join (select * from accdiag.gfrob_allcust_max_drawdown where 1=1
+			<if test="period !=null and period !=''">
+				and period_id =#{period} 
+			</if>  
+			<!-- 最大回撤 -->
+			<if test="max_max_drawdown !=null"  >
+				<![CDATA[
+					and #{max_max_drawdown} >= max_drawdown
+				]]>
+			</if>		
+			<if test="min_max_drawdown !=null"  >
+				<![CDATA[
+					and #{min_max_drawdown} <= max_drawdown
+				]]>
+			</if>)k on k.cust_id = b.cust_id and k.period_id = b.period_id
+		</if>
+		where 1=1
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period} 
+		</if>
+		<!-- 周期收益 -->	
+		<if test="max_my_profit !=null"  >
+			<![CDATA[
+				and #{max_my_profit} >= b.my_profit
+			]]>
+		</if>		
+		<if test="min_my_profit !=null"  >
+			<![CDATA[
+				and #{min_my_profit} <= b.my_profit
+			]]>
+		</if>
+		<!-- 进攻能力 -->
+		<if test="max_jgnl_score !=null"  >
+			<![CDATA[
+				and #{max_jgnl_score} >= b.jgnl_score
+			]]>
+		</if>		
+		<if test="min_jgnl_score !=null"  >
+			<![CDATA[
+				and #{min_jgnl_score} <= b.jgnl_score
+			]]>
+		</if>
+		<!-- 防御能力 -->
+		<if test="max_fynl_score !=null"  >
+			<![CDATA[
+				and #{max_fynl_score} >= b.fynl_score
+			]]>
+		</if>		
+		<if test="min_fynl_score !=null"  >
+			<![CDATA[
+				and #{min_fynl_score} <= b.fynl_score
+			]]>
+		</if>
+		<!-- alpha指标 -->
+		<if test="max_alpha_val !=null"  >
+			<![CDATA[
+				and #{max_alpha_val} >= b.alpha_val
+			]]>
+		</if>		
+		<if test="min_alpha_val !=null"  >
+			<![CDATA[
+				and #{min_alpha_val} <= b.alpha_val
+			]]>
+		</if>		
+		<!-- beta指标 -->		
+		<if test="max_beta_val !=null"  >
+			<![CDATA[
+				and #{max_beta_val} >= b.beta_val
+			]]>
+		</if>		
+		<if test="min_beta_val !=null"  >
+			<![CDATA[
+				and #{min_beta_val} <= b.beta_val
+			]]>
+		</if>
+		<!-- 择时能力 -->
+		<if test="max_zsnl_score !=null"  >
+			<![CDATA[
+				and #{max_zsnl_score} >= b.zsnl_score
+			]]>
+		</if>		
+		<if test="min_zsnl_score !=null"  >
+			<![CDATA[
+				and #{min_zsnl_score} <= b.zsnl_score
+			]]>
+		</if>
+		<!-- 择股能力 -->
+		<if test="max_zgnl_score !=null"  >
+			<![CDATA[
+				and #{max_zgnl_score} >= b.zgnl_score
+			]]>
+		</if>		
+		<if test="min_zgnl_score !=null"  >
+			<![CDATA[
+				and #{min_zgnl_score} <= b.zgnl_score
+			]]>
+		</if>		
+		<!-- var指标 -->
+		<if test="max_var_val !=null"  >
+			<![CDATA[
+				and #{max_var_val} >= b.var_val
+			]]>
+		</if>	
+		<if test="min_var_val !=null and min_var_val !='' or min_var_val == 0"  >
+			<![CDATA[
+				and #{min_var_val} <= b.var_val
+			]]>
+		</if>			
+		<!-- 超额胜率 -->
+		<if test="max_cesl_score !=null"  >
+			<![CDATA[
+				and #{max_cesl_score} >= b.cesl_score
+			]]>
+		</if>		
+		<if test="min_cesl_score !=null"  >
+			<![CDATA[
+				and #{min_cesl_score} <= b.cesl_score
+			]]>
+		</if>
+		<!-- 大类收益：股票/债券/基金 -->		
+	    <if test="profit_source !=null and profit_source !=''">
+			and b.source_id = #{profit_source}
+		</if>
+		<!-- 个股查询 -->
+		<if test="prd_name !=null and prd_name !=''">
+			and (b.prd_name1 like #{prd_name} or
+				 b.prd_name2 like #{prd_name} or
+				 b.prd_name3 like #{prd_name} or
+				 b.prd_name4 like #{prd_name} or
+				 b.prd_name5 like #{prd_name} )
+		</if>
+        <!-- 客户类型 -->
+		<if test="class_id !=null and class_id.size() > 0">
+			and b.class_id in
+			<foreach item="class_id" index="index" collection="class_id" open="(" separator="," close=")">
+             	#{class_id}
+        	</foreach>
+		</if>
+		<!-- 行业查询 -->
+		<if test="industry_prd !=null and industry_prd !=''">
+			and (b.industry_prd1 = #{industry_prd} or
+				 b.industry_prd2 = #{industry_prd} or
+				 b.industry_prd3 = #{industry_prd} or
+				 b.industry_prd4 = #{industry_prd} or
+				 b.industry_prd5 = #{industry_prd})
+		</if>
+		<!-- 超额收益 -->
+		<if test="max_ce_profit !=null"  >
+			<![CDATA[
+				and #{max_ce_profit} >= b.ce_profit
+			]]>
+		</if>		
+		<if test="min_ce_profit !=null"  >
+			<![CDATA[
+				and #{min_ce_profit} <= b.ce_profit
+			]]>
+		</if>
+		
+		<!-- 盈利次数 -->
+		<if test="max_profit_num !=null">
+			<![CDATA[
+				and #{max_profit_num} >= a.profit_num
+			]]>
+		</if>
+		<if test="min_profit_num !=null">
+			<![CDATA[
+				and a.profit_num >= #{min_profit_num}
+			]]>
+		</if>
+		<!-- 亏损次数 -->
+		<if test="max_deficit_num !=null">
+			<![CDATA[
+				and #{max_deficit_num} >= a.deficit_num
+			]]>
+		</if>
+		<if test="min_deficit_num !=null">
+			<![CDATA[
+				and a.deficit_num >= #{min_deficit_num}
+			]]>
+		</if>
+		<!-- 盈利金额 -->
+		<if test="max_profit_balance !=null">
+			<![CDATA[
+				and #{max_profit_balance} >= a.profit_balance
+			]]>
+		</if>
+		<if test="min_profit_balance !=null">
+			<![CDATA[
+				and a.profit_balance >= #{min_profit_balance}
+			]]>
+		</if>
+		<!-- 亏损金额 -->
+		<if test="max_deficit_balance !=null">
+			<![CDATA[
+				and #{max_deficit_balance} >= a.deficit_balance
+			]]>
+		</if>
+		<if test="min_deficit_balance !=null">
+			<![CDATA[
+				and a.deficit_balance >= #{min_deficit_balance}
+			]]>
+		</if>
+		<!-- 夏普比率 -->
+		<if test="max_sharpe_val !=null">
+			<![CDATA[
+				and #{max_sharpe_val} >= a.sharpe_val
+			]]>
+		</if>
+		<if test="min_sharpe_val !=null">
+			<![CDATA[
+				and a.sharpe_val >= #{min_sharpe_val}
+			]]>
+		</if>
+		<!-- 信息收益比 -->
+		<if test="max_info_val !=null">
+			<![CDATA[
+				and #{max_info_val} >= a.info_val
+			]]>
+		</if>
+		<if test="min_info_val !=null">
+			<![CDATA[
+				and a.info_val >= #{min_info_val}
+			]]>
+		</if>
+		<!-- 下行风险 -->
+		<if test="max_downside_risk !=null">
+			<![CDATA[
+				and #{max_downside_risk} >= a.downside_risk
+			]]>
+		</if>
+		<if test="min_downside_risk !=null">
+			<![CDATA[
+				and a.downside_risk >= #{min_downside_risk}
+			]]>
+		</if>
+		<!-- 净值增长率 -->
+		<if test="max_net_worth_uprate !=null">
+			<![CDATA[
+				and #{max_net_worth_uprate} >= a.net_worth_uprate
+			]]>
+		</if>
+		<if test="min_net_worth_uprate !=null">
+			<![CDATA[
+				and a.net_worth_uprate >= #{min_net_worth_uprate}
+			]]>
+		</if> 
+		<!-- 净值增长率标准差 -->
+		<if test="max_networth_uprate_stdev !=null">
+			<![CDATA[
+				and #{max_networth_uprate_stdev} >= a.networth_uprate_stdev
+			]]>
+		</if>
+		<if test="min_networth_uprate_stdev !=null">
+			<![CDATA[
+				and a.networth_uprate_stdev >= #{max_networth_uprate_stdev}
+			]]>
+		</if> 
+		<!-- 卖出盈利率 -->
+		<if test="max_sell_earnings_val !=null">
+			<![CDATA[
+				and #{max_sell_earnings_val} >= a.sell_earnings_val
+			]]>
+		</if>
+		<if test="min_sell_earnings_val !=null">
+			<![CDATA[
+				and a.sell_earnings_val >= #{min_sell_earnings_val}
+			]]>
+		</if> 		
+		<!--交易胜率 -->
+		<if test="max_exchange_winratio !=null">
+			<![CDATA[
+				and #{max_exchange_winratio} >= a.exchange_winratio
+			]]>
+		</if>
+		<if test="min_exchange_winratio !=null">
+			<![CDATA[
+				and a.exchange_winratio >= #{min_exchange_winratio}
+			]]>
+		</if> 		
+		<!-- 交易次数 -->
+		<if test="max_exchange_num !=null">
+			<![CDATA[
+				and #{max_exchange_num} >= a.exchange_num
+			]]>
+		</if>
+		<if test="min_exchange_num !=null">
+			<![CDATA[
+				and a.exchange_num >= #{min_exchange_num}
+			]]>
+		</if> 	
+		<!-- 交易换手率 -->
+		<if test="max_exchange_ratio !=null">
+			<![CDATA[
+				and #{max_exchange_ratio} >= a.exchange_ratio
+			]]>
+		</if>
+		<if test="min_exchange_ratio !=null">
+			<![CDATA[
+				and a.exchange_ratio >= #{min_exchange_ratio}
+			]]>
+		</if>			
+		<!-- 集中度(股票只数) -->
+		<if test="max_stock_num !=null">
+			<![CDATA[
+				and #{max_stock_num} >= a.stock_num
+			]]>
+		</if>
+		<if test="min_stock_num !=null">
+			<![CDATA[
+				and a.stock_num >= #{min_stock_num}
+			]]>
+		</if>		
+		<!-- 平均持仓时长 -->
+		<if test="max_stock_day_avg !=null">
+			<![CDATA[
+				and #{max_stock_day_avg} >= a.stock_day_avg
+			]]>
+		</if>
+		<if test="min_stock_day_avg !=null">
+			<![CDATA[
+				and a.stock_day_avg >= #{min_stock_day_avg}
+			]]>
+		</if>			
+		<!-- 回撤恢复时间 -->
+		<if test="max_daynum !=null">
+			<![CDATA[
+				and #{max_daynum} >= a.daynum
+			]]>
+		</if>
+		<if test="min_daynum !=null">
+			<![CDATA[
+				and a.daynum >= #{min_daynum}
+			]]>
+		</if>			
+		<![CDATA[
+			)z 
+		]]>	
+	</select>
+	
+	
+	<!-- 获取盈利次数 -->
+	<select id="getProfit_num" resultType="java.util.HashMap">
+		select count(profit_num),class_id,status from 
+		(select cust_id, class_id, period_id, profit_num,
+		case when 10 > profit_num then '1' 
+			 when profit_num BETWEEN 10 and 50 then '2' 
+			 when profit_num BETWEEN 50 and 100 then '3' 
+			 when profit_num>100 then '4' end as status from
+		(select b.cust_id, b.class_id, b.period_id,COALESCE(a.profit_num,0) profit_num,
+		row_number() over (partition by b.cust_id) as row_num
+		from accdiag.gfrob_all_data b 
+		left join accdiag.gfrob_pc_all_data a on a.customer_id = b.cust_id and a.period_id = b.period_id	
+		<!-- 股票仓位:accdiag.gfrob_customer_stock_ratio -->	
+		<if test="max_stock_ratio !=null and min_stock_ratio !=null">
+		join (select * from accdiag.gfrob_customer_stock_ratio where 1=1 
+			<if test="max_stock_ratio !=null">
+				<![CDATA[
+					and #{max_stock_ratio} >= stock_ratio
+				]]>
+			</if>
+			<if test="min_stock_ratio !=null">
+				<![CDATA[
+					and stock_ratio >= #{min_stock_ratio}
+				]]>
+			</if> 		
+		)c on b.cust_id = c.customer_id
+		</if>
+		<!-- 平均收益：accdiag.gfrob_classcust_avgprofit -->
+		<if test="(max_my_profit_avg !=null and min_my_profit_avg !=null) or (max_ce_profit_avg !=null and min_ce_profit_avg !=null)"  >
+			left join (select * from accdiag.gfrob_classcust_avgprofit where 1=1
+			<if test="period !=null and period !=''">
+				and period_id =#{period} 
+			</if>
+			<if test="max_my_profit_avg !=null"  >
+				<![CDATA[
+				and #{max_my_profit_avg} >= profit
+				]]>
+			</if>		
+			<if test="min_my_profit_avg !=null"  >
+				<![CDATA[
+				and #{min_my_profit_avg} <= profit
+				]]>
+			</if>		
+			<if test="max_ce_profit_avg !=null"  >
+				<![CDATA[
+				and #{max_ce_profit_avg} >= ce_profit
+				]]>
+			</if>		
+			<if test="min_ce_profit_avg !=null"  >
+				<![CDATA[
+				and #{min_ce_profit_avg} <= ce_profit
+				]]>
+			</if>)e on  b.class_id = e.class_id  and  b.period_id = e.period_id
+		</if>
+		<!-- 风格偏好：gfrob_customer_style_ph -->
+		<if test="(ptype !=null and ptype !='') or (ftype !=null and ftype !='')">
+		join (select gg.* from (select f.* from (select *,row_number() over (partition by cust_id order by busidate desc) as row_num from accdiag.gfrob_customer_style_ph)f where f.row_num = 1)gg
+			 where 1=1 
+			<if test="ptype !=null and ptype !=''">
+				and ptype = #{ptype}
+			</if>
+			<if test="ftype !=null and ftype !=''">
+				and ftype = #{ftype}
+			</if>
+			 )g on g.cust_id = b.cust_id
+		</if>
+		<!-- 行业占比：accdiag.gfrob_cust_indu_percent -->
+		<if test="indu_code !=null and indu_code.size() > 0">
+		left join (select * from accdiag.gfrob_cust_indu_percent where 1=1
+			and j.indu_code in
+        	<foreach item="indu_code" index="index" collection="indu_code" open="(" separator="," close=")">
+             	#{indu_code}
+        	</foreach>)j on j.cust_id = b.cust_id
+        </if>
+        <!-- 最大回撤：gfrob_allcust_max_drawdown -->
+		<if test="max_max_drawdown !=null and min_max_drawdown !=null"  >
+		join (select * from accdiag.gfrob_allcust_max_drawdown where 1=1
+			<if test="period !=null and period !=''">
+				and period_id =#{period} 
+			</if>  
+			<!-- 最大回撤 -->
+			<if test="max_max_drawdown !=null"  >
+				<![CDATA[
+					and #{max_max_drawdown} >= max_drawdown
+				]]>
+			</if>		
+			<if test="min_max_drawdown !=null"  >
+				<![CDATA[
+					and #{min_max_drawdown} <= max_drawdown
+				]]>
+			</if>)k on k.cust_id = b.cust_id and k.period_id = b.period_id
+		</if>
+		where 1=1
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period} 
+		</if>
+		<!-- 周期收益 -->	
+		<if test="max_my_profit !=null"  >
+			<![CDATA[
+				and #{max_my_profit} >= b.my_profit
+			]]>
+		</if>		
+		<if test="min_my_profit !=null"  >
+			<![CDATA[
+				and #{min_my_profit} <= b.my_profit
+			]]>
+		</if>
+		<!-- 进攻能力 -->
+		<if test="max_jgnl_score !=null"  >
+			<![CDATA[
+				and #{max_jgnl_score} >= b.jgnl_score
+			]]>
+		</if>		
+		<if test="min_jgnl_score !=null"  >
+			<![CDATA[
+				and #{min_jgnl_score} <= b.jgnl_score
+			]]>
+		</if>
+		<!-- 防御能力 -->
+		<if test="max_fynl_score !=null"  >
+			<![CDATA[
+				and #{max_fynl_score} >= b.fynl_score
+			]]>
+		</if>		
+		<if test="min_fynl_score !=null"  >
+			<![CDATA[
+				and #{min_fynl_score} <= b.fynl_score
+			]]>
+		</if>
+		<!-- alpha指标 -->
+		<if test="max_alpha_val !=null"  >
+			<![CDATA[
+				and #{max_alpha_val} >= b.alpha_val
+			]]>
+		</if>		
+		<if test="min_alpha_val !=null"  >
+			<![CDATA[
+				and #{min_alpha_val} <= b.alpha_val
+			]]>
+		</if>		
+		<!-- beta指标 -->		
+		<if test="max_beta_val !=null"  >
+			<![CDATA[
+				and #{max_beta_val} >= b.beta_val
+			]]>
+		</if>		
+		<if test="min_beta_val !=null"  >
+			<![CDATA[
+				and #{min_beta_val} <= b.beta_val
+			]]>
+		</if>
+		<!-- 择时能力 -->
+		<if test="max_zsnl_score !=null"  >
+			<![CDATA[
+				and #{max_zsnl_score} >= b.zsnl_score
+			]]>
+		</if>		
+		<if test="min_zsnl_score !=null"  >
+			<![CDATA[
+				and #{min_zsnl_score} <= b.zsnl_score
+			]]>
+		</if>
+		<!-- 择股能力 -->
+		<if test="max_zgnl_score !=null"  >
+			<![CDATA[
+				and #{max_zgnl_score} >= b.zgnl_score
+			]]>
+		</if>		
+		<if test="min_zgnl_score !=null"  >
+			<![CDATA[
+				and #{min_zgnl_score} <= b.zgnl_score
+			]]>
+		</if>		
+		<!-- var指标 -->
+		<if test="max_var_val !=null"  >
+			<![CDATA[
+				and #{max_var_val} >= b.var_val
+			]]>
+		</if>	
+		<if test="min_var_val !=null and min_var_val !='' or min_var_val == 0"  >
+			<![CDATA[
+				and #{min_var_val} <= b.var_val
+			]]>
+		</if>			
+		<!-- 超额胜率 -->
+		<if test="max_cesl_score !=null"  >
+			<![CDATA[
+				and #{max_cesl_score} >= b.cesl_score
+			]]>
+		</if>		
+		<if test="min_cesl_score !=null"  >
+			<![CDATA[
+				and #{min_cesl_score} <= b.cesl_score
+			]]>
+		</if>
+		<!-- 大类收益：股票/债券/基金 -->		
+	    <if test="profit_source !=null and profit_source !=''">
+			and b.source_id = #{profit_source}
+		</if>
+		<!-- 个股查询 -->
+		<if test="prd_name !=null and prd_name !=''">
+			and (b.prd_name1 like #{prd_name} or
+				 b.prd_name2 like #{prd_name} or
+				 b.prd_name3 like #{prd_name} or
+				 b.prd_name4 like #{prd_name} or
+				 b.prd_name5 like #{prd_name} )
+		</if>
+        <!-- 客户类型 -->
+		<if test="class_id !=null and class_id.size() > 0">
+			and b.class_id in
+			<foreach item="class_id" index="index" collection="class_id" open="(" separator="," close=")">
+             	#{class_id}
+        	</foreach>
+		</if>
+		<!-- 行业查询 -->
+		<if test="industry_prd !=null and industry_prd !=''">
+			and (b.industry_prd1 = #{industry_prd} or
+				 b.industry_prd2 = #{industry_prd} or
+				 b.industry_prd3 = #{industry_prd} or
+				 b.industry_prd4 = #{industry_prd} or
+				 b.industry_prd5 = #{industry_prd})
+		</if>
+		<!-- 超额收益 -->
+		<if test="max_ce_profit !=null"  >
+			<![CDATA[
+				and #{max_ce_profit} >= b.ce_profit
+			]]>
+		</if>		
+		<if test="min_ce_profit !=null"  >
+			<![CDATA[
+				and #{min_ce_profit} <= b.ce_profit
+			]]>
+		</if>
+		
+		<!-- 盈利次数 -->
+		<if test="max_profit_num !=null">
+			<![CDATA[
+				and #{max_profit_num} >= a.profit_num
+			]]>
+		</if>
+		<if test="min_profit_num !=null">
+			<![CDATA[
+				and a.profit_num >= #{min_profit_num}
+			]]>
+		</if>
+		<!-- 亏损次数 -->
+		<if test="max_deficit_num !=null">
+			<![CDATA[
+				and #{max_deficit_num} >= a.deficit_num
+			]]>
+		</if>
+		<if test="min_deficit_num !=null">
+			<![CDATA[
+				and a.deficit_num >= #{min_deficit_num}
+			]]>
+		</if>
+		<!-- 盈利金额 -->
+		<if test="max_profit_balance !=null">
+			<![CDATA[
+				and #{max_profit_balance} >= a.profit_balance
+			]]>
+		</if>
+		<if test="min_profit_balance !=null">
+			<![CDATA[
+				and a.profit_balance >= #{min_profit_balance}
+			]]>
+		</if>
+		<!-- 亏损金额 -->
+		<if test="max_deficit_balance !=null">
+			<![CDATA[
+				and #{max_deficit_balance} >= a.deficit_balance
+			]]>
+		</if>
+		<if test="min_deficit_balance !=null">
+			<![CDATA[
+				and a.deficit_balance >= #{min_deficit_balance}
+			]]>
+		</if>
+		<!-- 夏普比率 -->
+		<if test="max_sharpe_val !=null">
+			<![CDATA[
+				and #{max_sharpe_val} >= a.sharpe_val
+			]]>
+		</if>
+		<if test="min_sharpe_val !=null">
+			<![CDATA[
+				and a.sharpe_val >= #{min_sharpe_val}
+			]]>
+		</if>
+		<!-- 信息收益比 -->
+		<if test="max_info_val !=null">
+			<![CDATA[
+				and #{max_info_val} >= a.info_val
+			]]>
+		</if>
+		<if test="min_info_val !=null">
+			<![CDATA[
+				and a.info_val >= #{min_info_val}
+			]]>
+		</if>
+		<!-- 下行风险 -->
+		<if test="max_downside_risk !=null">
+			<![CDATA[
+				and #{max_downside_risk} >= a.downside_risk
+			]]>
+		</if>
+		<if test="min_downside_risk !=null">
+			<![CDATA[
+				and a.downside_risk >= #{min_downside_risk}
+			]]>
+		</if>
+		<!-- 净值增长率 -->
+		<if test="max_net_worth_uprate !=null">
+			<![CDATA[
+				and #{max_net_worth_uprate} >= a.net_worth_uprate
+			]]>
+		</if>
+		<if test="min_net_worth_uprate !=null">
+			<![CDATA[
+				and a.net_worth_uprate >= #{min_net_worth_uprate}
+			]]>
+		</if> 
+		<!-- 净值增长率标准差 -->
+		<if test="max_networth_uprate_stdev !=null">
+			<![CDATA[
+				and #{max_networth_uprate_stdev} >= a.networth_uprate_stdev
+			]]>
+		</if>
+		<if test="min_networth_uprate_stdev !=null">
+			<![CDATA[
+				and a.networth_uprate_stdev >= #{max_networth_uprate_stdev}
+			]]>
+		</if> 
+		<!-- 卖出盈利率 -->
+		<if test="max_sell_earnings_val !=null">
+			<![CDATA[
+				and #{max_sell_earnings_val} >= a.sell_earnings_val
+			]]>
+		</if>
+		<if test="min_sell_earnings_val !=null">
+			<![CDATA[
+				and a.sell_earnings_val >= #{min_sell_earnings_val}
+			]]>
+		</if> 		
+		<!--交易胜率 -->
+		<if test="max_exchange_winratio !=null">
+			<![CDATA[
+				and #{max_exchange_winratio} >= a.exchange_winratio
+			]]>
+		</if>
+		<if test="min_exchange_winratio !=null">
+			<![CDATA[
+				and a.exchange_winratio >= #{min_exchange_winratio}
+			]]>
+		</if> 		
+		<!-- 交易次数 -->
+		<if test="max_exchange_num !=null">
+			<![CDATA[
+				and #{max_exchange_num} >= a.exchange_num
+			]]>
+		</if>
+		<if test="min_exchange_num !=null">
+			<![CDATA[
+				and a.exchange_num >= #{min_exchange_num}
+			]]>
+		</if> 	
+		<!-- 交易换手率 -->
+		<if test="max_exchange_ratio !=null">
+			<![CDATA[
+				and #{max_exchange_ratio} >= a.exchange_ratio
+			]]>
+		</if>
+		<if test="min_exchange_ratio !=null">
+			<![CDATA[
+				and a.exchange_ratio >= #{min_exchange_ratio}
+			]]>
+		</if>			
+		<!-- 集中度(股票只数) -->
+		<if test="max_stock_num !=null">
+			<![CDATA[
+				and #{max_stock_num} >= a.stock_num
+			]]>
+		</if>
+		<if test="min_stock_num !=null">
+			<![CDATA[
+				and a.stock_num >= #{min_stock_num}
+			]]>
+		</if>		
+		<!-- 平均持仓时长 -->
+		<if test="max_stock_day_avg !=null">
+			<![CDATA[
+				and #{max_stock_day_avg} >= a.stock_day_avg
+			]]>
+		</if>
+		<if test="min_stock_day_avg !=null">
+			<![CDATA[
+				and a.stock_day_avg >= #{min_stock_day_avg}
+			]]>
+		</if>			
+		<!-- 回撤恢复时间 -->
+		<if test="max_daynum !=null">
+			<![CDATA[
+				and #{max_daynum} >= a.daynum
+			]]>
+		</if>
+		<if test="min_daynum !=null">
+			<![CDATA[
+				and a.daynum >= #{min_daynum}
+			]]>
+		</if>			
+						
+		order by b.cust_id asc 
+		<![CDATA[
+			)z 
+		where z.row_num < 2)ttt
+		group by ttt.status, ttt.class_id
+		order by class_id asc
+		]]>	
+	</select>
+	
+	<!-- 获取亏损次数 -->
+	<select id="getDeficit_num" resultType="java.util.HashMap">
+		select count(deficit_num),class_id,status from 
+		(select cust_id, class_id, period_id, deficit_num,
+		case when 10 > deficit_num then '1' 
+			 when deficit_num BETWEEN 10 and 50 then '2' 
+			 when deficit_num BETWEEN 50 and 100 then '3' 
+			 when deficit_num>100 then '4' end as status from
+		(select b.cust_id, b.class_id, b.period_id,COALESCE(a.deficit_num,0) deficit_num,
+		row_number() over (partition by b.cust_id) as row_num
+		from accdiag.gfrob_all_data b 
+		left join accdiag.gfrob_pc_all_data a on a.customer_id = b.cust_id and a.period_id = b.period_id	
+		<!-- 股票仓位:accdiag.gfrob_customer_stock_ratio -->	
+		<if test="max_stock_ratio !=null and min_stock_ratio !=null">
+		join (select * from accdiag.gfrob_customer_stock_ratio where 1=1 
+			<if test="max_stock_ratio !=null">
+				<![CDATA[
+					and #{max_stock_ratio} >= stock_ratio
+				]]>
+			</if>
+			<if test="min_stock_ratio !=null">
+				<![CDATA[
+					and stock_ratio >= #{min_stock_ratio}
+				]]>
+			</if> 		
+		)c on b.cust_id = c.customer_id
+		</if>
+		<!-- 平均收益：accdiag.gfrob_classcust_avgprofit -->
+		<if test="(max_my_profit_avg !=null and min_my_profit_avg !=null) or (max_ce_profit_avg !=null and min_ce_profit_avg !=null)"  >
+			left join (select * from accdiag.gfrob_classcust_avgprofit where 1=1
+			<if test="period !=null and period !=''">
+				and period_id =#{period} 
+			</if>
+			<if test="max_my_profit_avg !=null"  >
+				<![CDATA[
+				and #{max_my_profit_avg} >= profit
+				]]>
+			</if>		
+			<if test="min_my_profit_avg !=null"  >
+				<![CDATA[
+				and #{min_my_profit_avg} <= profit
+				]]>
+			</if>		
+			<if test="max_ce_profit_avg !=null"  >
+				<![CDATA[
+				and #{max_ce_profit_avg} >= ce_profit
+				]]>
+			</if>		
+			<if test="min_ce_profit_avg !=null"  >
+				<![CDATA[
+				and #{min_ce_profit_avg} <= ce_profit
+				]]>
+			</if>)e on  b.class_id = e.class_id  and  b.period_id = e.period_id
+		</if>
+		<!-- 风格偏好：gfrob_customer_style_ph -->
+		<if test="(ptype !=null and ptype !='') or (ftype !=null and ftype !='')">
+		join (select gg.* from (select f.* from (select *,row_number() over (partition by cust_id order by busidate desc) as row_num from accdiag.gfrob_customer_style_ph)f where f.row_num = 1)gg
+			 where 1=1 
+			<if test="ptype !=null and ptype !=''">
+				and ptype = #{ptype}
+			</if>
+			<if test="ftype !=null and ftype !=''">
+				and ftype = #{ftype}
+			</if>
+			 )g on g.cust_id = b.cust_id
+		</if>
+		<!-- 行业占比：accdiag.gfrob_cust_indu_percent -->
+		<if test="indu_code !=null and indu_code.size() > 0">
+		left join (select * from accdiag.gfrob_cust_indu_percent where 1=1
+			and j.indu_code in
+        	<foreach item="indu_code" index="index" collection="indu_code" open="(" separator="," close=")">
+             	#{indu_code}
+        	</foreach>)j on j.cust_id = b.cust_id
+        </if>
+        <!-- 最大回撤：gfrob_allcust_max_drawdown -->
+		<if test="max_max_drawdown !=null and min_max_drawdown !=null"  >
+		join (select * from accdiag.gfrob_allcust_max_drawdown where 1=1
+			<if test="period !=null and period !=''">
+				and period_id =#{period} 
+			</if>  
+			<!-- 最大回撤 -->
+			<if test="max_max_drawdown !=null"  >
+				<![CDATA[
+					and #{max_max_drawdown} >= max_drawdown
+				]]>
+			</if>		
+			<if test="min_max_drawdown !=null"  >
+				<![CDATA[
+					and #{min_max_drawdown} <= max_drawdown
+				]]>
+			</if>)k on k.cust_id = b.cust_id and k.period_id = b.period_id
+		</if>
+		where 1=1
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period} 
+		</if>
+		<!-- 周期收益 -->	
+		<if test="max_my_profit !=null"  >
+			<![CDATA[
+				and #{max_my_profit} >= b.my_profit
+			]]>
+		</if>		
+		<if test="min_my_profit !=null"  >
+			<![CDATA[
+				and #{min_my_profit} <= b.my_profit
+			]]>
+		</if>
+		<!-- 进攻能力 -->
+		<if test="max_jgnl_score !=null"  >
+			<![CDATA[
+				and #{max_jgnl_score} >= b.jgnl_score
+			]]>
+		</if>		
+		<if test="min_jgnl_score !=null"  >
+			<![CDATA[
+				and #{min_jgnl_score} <= b.jgnl_score
+			]]>
+		</if>
+		<!-- 防御能力 -->
+		<if test="max_fynl_score !=null"  >
+			<![CDATA[
+				and #{max_fynl_score} >= b.fynl_score
+			]]>
+		</if>		
+		<if test="min_fynl_score !=null"  >
+			<![CDATA[
+				and #{min_fynl_score} <= b.fynl_score
+			]]>
+		</if>
+		<!-- alpha指标 -->
+		<if test="max_alpha_val !=null"  >
+			<![CDATA[
+				and #{max_alpha_val} >= b.alpha_val
+			]]>
+		</if>		
+		<if test="min_alpha_val !=null"  >
+			<![CDATA[
+				and #{min_alpha_val} <= b.alpha_val
+			]]>
+		</if>		
+		<!-- beta指标 -->		
+		<if test="max_beta_val !=null"  >
+			<![CDATA[
+				and #{max_beta_val} >= b.beta_val
+			]]>
+		</if>		
+		<if test="min_beta_val !=null"  >
+			<![CDATA[
+				and #{min_beta_val} <= b.beta_val
+			]]>
+		</if>
+		<!-- 择时能力 -->
+		<if test="max_zsnl_score !=null"  >
+			<![CDATA[
+				and #{max_zsnl_score} >= b.zsnl_score
+			]]>
+		</if>		
+		<if test="min_zsnl_score !=null"  >
+			<![CDATA[
+				and #{min_zsnl_score} <= b.zsnl_score
+			]]>
+		</if>
+		<!-- 择股能力 -->
+		<if test="max_zgnl_score !=null"  >
+			<![CDATA[
+				and #{max_zgnl_score} >= b.zgnl_score
+			]]>
+		</if>		
+		<if test="min_zgnl_score !=null"  >
+			<![CDATA[
+				and #{min_zgnl_score} <= b.zgnl_score
+			]]>
+		</if>		
+		<!-- var指标 -->
+		<if test="max_var_val !=null"  >
+			<![CDATA[
+				and #{max_var_val} >= b.var_val
+			]]>
+		</if>	
+		<if test="min_var_val !=null and min_var_val !='' or min_var_val == 0"  >
+			<![CDATA[
+				and #{min_var_val} <= b.var_val
+			]]>
+		</if>			
+		<!-- 超额胜率 -->
+		<if test="max_cesl_score !=null"  >
+			<![CDATA[
+				and #{max_cesl_score} >= b.cesl_score
+			]]>
+		</if>		
+		<if test="min_cesl_score !=null"  >
+			<![CDATA[
+				and #{min_cesl_score} <= b.cesl_score
+			]]>
+		</if>
+		<!-- 大类收益：股票/债券/基金 -->		
+	    <if test="profit_source !=null and profit_source !=''">
+			and b.source_id = #{profit_source}
+		</if>
+		<!-- 个股查询 -->
+		<if test="prd_name !=null and prd_name !=''">
+			and (b.prd_name1 like #{prd_name} or
+				 b.prd_name2 like #{prd_name} or
+				 b.prd_name3 like #{prd_name} or
+				 b.prd_name4 like #{prd_name} or
+				 b.prd_name5 like #{prd_name} )
+		</if>
+        <!-- 客户类型 -->
+		<if test="class_id !=null and class_id.size() > 0">
+			and b.class_id in
+			<foreach item="class_id" index="index" collection="class_id" open="(" separator="," close=")">
+             	#{class_id}
+        	</foreach>
+		</if>
+		<!-- 行业查询 -->
+		<if test="industry_prd !=null and industry_prd !=''">
+			and (b.industry_prd1 = #{industry_prd} or
+				 b.industry_prd2 = #{industry_prd} or
+				 b.industry_prd3 = #{industry_prd} or
+				 b.industry_prd4 = #{industry_prd} or
+				 b.industry_prd5 = #{industry_prd})
+		</if>
+		<!-- 超额收益 -->
+		<if test="max_ce_profit !=null"  >
+			<![CDATA[
+				and #{max_ce_profit} >= b.ce_profit
+			]]>
+		</if>		
+		<if test="min_ce_profit !=null"  >
+			<![CDATA[
+				and #{min_ce_profit} <= b.ce_profit
+			]]>
+		</if>
+		
+		<!-- 盈利次数 -->
+		<if test="max_profit_num !=null">
+			<![CDATA[
+				and #{max_profit_num} >= a.profit_num
+			]]>
+		</if>
+		<if test="min_profit_num !=null">
+			<![CDATA[
+				and a.profit_num >= #{min_profit_num}
+			]]>
+		</if>
+		<!-- 亏损次数 -->
+		<if test="max_deficit_num !=null">
+			<![CDATA[
+				and #{max_deficit_num} >= a.deficit_num
+			]]>
+		</if>
+		<if test="min_deficit_num !=null">
+			<![CDATA[
+				and a.deficit_num >= #{min_deficit_num}
+			]]>
+		</if>
+		<!-- 盈利金额 -->
+		<if test="max_profit_balance !=null">
+			<![CDATA[
+				and #{max_profit_balance} >= a.profit_balance
+			]]>
+		</if>
+		<if test="min_profit_balance !=null">
+			<![CDATA[
+				and a.profit_balance >= #{min_profit_balance}
+			]]>
+		</if>
+		<!-- 亏损金额 -->
+		<if test="max_deficit_balance !=null">
+			<![CDATA[
+				and #{max_deficit_balance} >= a.deficit_balance
+			]]>
+		</if>
+		<if test="min_deficit_balance !=null">
+			<![CDATA[
+				and a.deficit_balance >= #{min_deficit_balance}
+			]]>
+		</if>
+		<!-- 夏普比率 -->
+		<if test="max_sharpe_val !=null">
+			<![CDATA[
+				and #{max_sharpe_val} >= a.sharpe_val
+			]]>
+		</if>
+		<if test="min_sharpe_val !=null">
+			<![CDATA[
+				and a.sharpe_val >= #{min_sharpe_val}
+			]]>
+		</if>
+		<!-- 信息收益比 -->
+		<if test="max_info_val !=null">
+			<![CDATA[
+				and #{max_info_val} >= a.info_val
+			]]>
+		</if>
+		<if test="min_info_val !=null">
+			<![CDATA[
+				and a.info_val >= #{min_info_val}
+			]]>
+		</if>
+		<!-- 下行风险 -->
+		<if test="max_downside_risk !=null">
+			<![CDATA[
+				and #{max_downside_risk} >= a.downside_risk
+			]]>
+		</if>
+		<if test="min_downside_risk !=null">
+			<![CDATA[
+				and a.downside_risk >= #{min_downside_risk}
+			]]>
+		</if>
+		<!-- 净值增长率 -->
+		<if test="max_net_worth_uprate !=null">
+			<![CDATA[
+				and #{max_net_worth_uprate} >= a.net_worth_uprate
+			]]>
+		</if>
+		<if test="min_net_worth_uprate !=null">
+			<![CDATA[
+				and a.net_worth_uprate >= #{min_net_worth_uprate}
+			]]>
+		</if> 
+		<!-- 净值增长率标准差 -->
+		<if test="max_networth_uprate_stdev !=null">
+			<![CDATA[
+				and #{max_networth_uprate_stdev} >= a.networth_uprate_stdev
+			]]>
+		</if>
+		<if test="min_networth_uprate_stdev !=null">
+			<![CDATA[
+				and a.networth_uprate_stdev >= #{max_networth_uprate_stdev}
+			]]>
+		</if> 
+		<!-- 卖出盈利率 -->
+		<if test="max_sell_earnings_val !=null">
+			<![CDATA[
+				and #{max_sell_earnings_val} >= a.sell_earnings_val
+			]]>
+		</if>
+		<if test="min_sell_earnings_val !=null">
+			<![CDATA[
+				and a.sell_earnings_val >= #{min_sell_earnings_val}
+			]]>
+		</if> 		
+		<!--交易胜率 -->
+		<if test="max_exchange_winratio !=null">
+			<![CDATA[
+				and #{max_exchange_winratio} >= a.exchange_winratio
+			]]>
+		</if>
+		<if test="min_exchange_winratio !=null">
+			<![CDATA[
+				and a.exchange_winratio >= #{min_exchange_winratio}
+			]]>
+		</if> 		
+		<!-- 交易次数 -->
+		<if test="max_exchange_num !=null">
+			<![CDATA[
+				and #{max_exchange_num} >= a.exchange_num
+			]]>
+		</if>
+		<if test="min_exchange_num !=null">
+			<![CDATA[
+				and a.exchange_num >= #{min_exchange_num}
+			]]>
+		</if> 	
+		<!-- 交易换手率 -->
+		<if test="max_exchange_ratio !=null">
+			<![CDATA[
+				and #{max_exchange_ratio} >= a.exchange_ratio
+			]]>
+		</if>
+		<if test="min_exchange_ratio !=null">
+			<![CDATA[
+				and a.exchange_ratio >= #{min_exchange_ratio}
+			]]>
+		</if>			
+		<!-- 集中度(股票只数) -->
+		<if test="max_stock_num !=null">
+			<![CDATA[
+				and #{max_stock_num} >= a.stock_num
+			]]>
+		</if>
+		<if test="min_stock_num !=null">
+			<![CDATA[
+				and a.stock_num >= #{min_stock_num}
+			]]>
+		</if>		
+		<!-- 平均持仓时长 -->
+		<if test="max_stock_day_avg !=null">
+			<![CDATA[
+				and #{max_stock_day_avg} >= a.stock_day_avg
+			]]>
+		</if>
+		<if test="min_stock_day_avg !=null">
+			<![CDATA[
+				and a.stock_day_avg >= #{min_stock_day_avg}
+			]]>
+		</if>			
+		<!-- 回撤恢复时间 -->
+		<if test="max_daynum !=null">
+			<![CDATA[
+				and #{max_daynum} >= a.daynum
+			]]>
+		</if>
+		<if test="min_daynum !=null">
+			<![CDATA[
+				and a.daynum >= #{min_daynum}
+			]]>
+		</if>			
+						
+		order by b.cust_id asc 
+		<![CDATA[
+			)z 
+		where z.row_num < 2)ttt
+		group by ttt.status, ttt.class_id
+		order by class_id asc
+		]]>	
+	</select>
+
+ 	<!-- 获取盈利金额 -->
+	<select id="getProfit_balance" resultType="java.util.HashMap">
+		select count(Profit_balance),class_id,status from 
+		(select cust_id, class_id, period_id, Profit_balance,
+		case when 10 > Profit_balance then '1' 
+			 when Profit_balance BETWEEN 10 and 50 then '2' 
+			 when Profit_balance BETWEEN 50 and 100 then '3' 
+			 when Profit_balance>100 then '4' end as status from
+		(select b.cust_id, b.class_id, b.period_id,COALESCE(a.Profit_balance,0) Profit_balance,
+		row_number() over (partition by b.cust_id) as row_num
+		from accdiag.gfrob_all_data b 
+		left join accdiag.gfrob_pc_all_data a on a.customer_id = b.cust_id and a.period_id = b.period_id	
+		<!-- 股票仓位:accdiag.gfrob_customer_stock_ratio -->	
+		<if test="max_stock_ratio !=null and min_stock_ratio !=null">
+		join (select * from accdiag.gfrob_customer_stock_ratio where 1=1 
+			<if test="max_stock_ratio !=null">
+				<![CDATA[
+					and #{max_stock_ratio} >= stock_ratio
+				]]>
+			</if>
+			<if test="min_stock_ratio !=null">
+				<![CDATA[
+					and stock_ratio >= #{min_stock_ratio}
+				]]>
+			</if> 		
+		)c on b.cust_id = c.customer_id
+		</if>
+		<!-- 平均收益：accdiag.gfrob_classcust_avgprofit -->
+		<if test="(max_my_profit_avg !=null and min_my_profit_avg !=null) or (max_ce_profit_avg !=null and min_ce_profit_avg !=null)"  >
+			left join (select * from accdiag.gfrob_classcust_avgprofit where 1=1
+			<if test="period !=null and period !=''">
+				and period_id =#{period} 
+			</if>
+			<if test="max_my_profit_avg !=null"  >
+				<![CDATA[
+				and #{max_my_profit_avg} >= profit
+				]]>
+			</if>		
+			<if test="min_my_profit_avg !=null"  >
+				<![CDATA[
+				and #{min_my_profit_avg} <= profit
+				]]>
+			</if>		
+			<if test="max_ce_profit_avg !=null"  >
+				<![CDATA[
+				and #{max_ce_profit_avg} >= ce_profit
+				]]>
+			</if>		
+			<if test="min_ce_profit_avg !=null"  >
+				<![CDATA[
+				and #{min_ce_profit_avg} <= ce_profit
+				]]>
+			</if>)e on  b.class_id = e.class_id  and  b.period_id = e.period_id
+		</if>
+		<!-- 风格偏好：gfrob_customer_style_ph -->
+		<if test="(ptype !=null and ptype !='') or (ftype !=null and ftype !='')">
+		join (select gg.* from (select f.* from (select *,row_number() over (partition by cust_id order by busidate desc) as row_num from accdiag.gfrob_customer_style_ph)f where f.row_num = 1)gg
+			 where 1=1 
+			<if test="ptype !=null and ptype !=''">
+				and ptype = #{ptype}
+			</if>
+			<if test="ftype !=null and ftype !=''">
+				and ftype = #{ftype}
+			</if>
+			 )g on g.cust_id = b.cust_id
+		</if>
+		<!-- 行业占比：accdiag.gfrob_cust_indu_percent -->
+		<if test="indu_code !=null and indu_code.size() > 0">
+		left join (select * from accdiag.gfrob_cust_indu_percent where 1=1
+			and j.indu_code in
+        	<foreach item="indu_code" index="index" collection="indu_code" open="(" separator="," close=")">
+             	#{indu_code}
+        	</foreach>)j on j.cust_id = b.cust_id
+        </if>
+        <!-- 最大回撤：gfrob_allcust_max_drawdown -->
+		<if test="max_max_drawdown !=null and min_max_drawdown !=null"  >
+		join (select * from accdiag.gfrob_allcust_max_drawdown where 1=1
+			<if test="period !=null and period !=''">
+				and period_id =#{period} 
+			</if>  
+			<!-- 最大回撤 -->
+			<if test="max_max_drawdown !=null"  >
+				<![CDATA[
+					and #{max_max_drawdown} >= max_drawdown
+				]]>
+			</if>		
+			<if test="min_max_drawdown !=null"  >
+				<![CDATA[
+					and #{min_max_drawdown} <= max_drawdown
+				]]>
+			</if>)k on k.cust_id = b.cust_id and k.period_id = b.period_id
+		</if>
+		where 1=1
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period} 
+		</if>
+		<!-- 周期收益 -->	
+		<if test="max_my_profit !=null"  >
+			<![CDATA[
+				and #{max_my_profit} >= b.my_profit
+			]]>
+		</if>		
+		<if test="min_my_profit !=null"  >
+			<![CDATA[
+				and #{min_my_profit} <= b.my_profit
+			]]>
+		</if>
+		<!-- 进攻能力 -->
+		<if test="max_jgnl_score !=null"  >
+			<![CDATA[
+				and #{max_jgnl_score} >= b.jgnl_score
+			]]>
+		</if>		
+		<if test="min_jgnl_score !=null"  >
+			<![CDATA[
+				and #{min_jgnl_score} <= b.jgnl_score
+			]]>
+		</if>
+		<!-- 防御能力 -->
+		<if test="max_fynl_score !=null"  >
+			<![CDATA[
+				and #{max_fynl_score} >= b.fynl_score
+			]]>
+		</if>		
+		<if test="min_fynl_score !=null"  >
+			<![CDATA[
+				and #{min_fynl_score} <= b.fynl_score
+			]]>
+		</if>
+		<!-- alpha指标 -->
+		<if test="max_alpha_val !=null"  >
+			<![CDATA[
+				and #{max_alpha_val} >= b.alpha_val
+			]]>
+		</if>		
+		<if test="min_alpha_val !=null"  >
+			<![CDATA[
+				and #{min_alpha_val} <= b.alpha_val
+			]]>
+		</if>		
+		<!-- beta指标 -->		
+		<if test="max_beta_val !=null"  >
+			<![CDATA[
+				and #{max_beta_val} >= b.beta_val
+			]]>
+		</if>		
+		<if test="min_beta_val !=null"  >
+			<![CDATA[
+				and #{min_beta_val} <= b.beta_val
+			]]>
+		</if>
+		<!-- 择时能力 -->
+		<if test="max_zsnl_score !=null"  >
+			<![CDATA[
+				and #{max_zsnl_score} >= b.zsnl_score
+			]]>
+		</if>		
+		<if test="min_zsnl_score !=null"  >
+			<![CDATA[
+				and #{min_zsnl_score} <= b.zsnl_score
+			]]>
+		</if>
+		<!-- 择股能力 -->
+		<if test="max_zgnl_score !=null"  >
+			<![CDATA[
+				and #{max_zgnl_score} >= b.zgnl_score
+			]]>
+		</if>		
+		<if test="min_zgnl_score !=null"  >
+			<![CDATA[
+				and #{min_zgnl_score} <= b.zgnl_score
+			]]>
+		</if>		
+		<!-- var指标 -->
+		<if test="max_var_val !=null"  >
+			<![CDATA[
+				and #{max_var_val} >= b.var_val
+			]]>
+		</if>	
+		<if test="min_var_val !=null and min_var_val !='' or min_var_val == 0"  >
+			<![CDATA[
+				and #{min_var_val} <= b.var_val
+			]]>
+		</if>			
+		<!-- 超额胜率 -->
+		<if test="max_cesl_score !=null"  >
+			<![CDATA[
+				and #{max_cesl_score} >= b.cesl_score
+			]]>
+		</if>		
+		<if test="min_cesl_score !=null"  >
+			<![CDATA[
+				and #{min_cesl_score} <= b.cesl_score
+			]]>
+		</if>
+		<!-- 大类收益：股票/债券/基金 -->		
+	    <if test="profit_source !=null and profit_source !=''">
+			and b.source_id = #{profit_source}
+		</if>
+		<!-- 个股查询 -->
+		<if test="prd_name !=null and prd_name !=''">
+			and (b.prd_name1 like #{prd_name} or
+				 b.prd_name2 like #{prd_name} or
+				 b.prd_name3 like #{prd_name} or
+				 b.prd_name4 like #{prd_name} or
+				 b.prd_name5 like #{prd_name} )
+		</if>
+        <!-- 客户类型 -->
+		<if test="class_id !=null and class_id.size() > 0">
+			and b.class_id in
+			<foreach item="class_id" index="index" collection="class_id" open="(" separator="," close=")">
+             	#{class_id}
+        	</foreach>
+		</if>
+		<!-- 行业查询 -->
+		<if test="industry_prd !=null and industry_prd !=''">
+			and (b.industry_prd1 = #{industry_prd} or
+				 b.industry_prd2 = #{industry_prd} or
+				 b.industry_prd3 = #{industry_prd} or
+				 b.industry_prd4 = #{industry_prd} or
+				 b.industry_prd5 = #{industry_prd})
+		</if>
+		<!-- 超额收益 -->
+		<if test="max_ce_profit !=null"  >
+			<![CDATA[
+				and #{max_ce_profit} >= b.ce_profit
+			]]>
+		</if>		
+		<if test="min_ce_profit !=null"  >
+			<![CDATA[
+				and #{min_ce_profit} <= b.ce_profit
+			]]>
+		</if>
+		
+		<!-- 盈利次数 -->
+		<if test="max_profit_num !=null">
+			<![CDATA[
+				and #{max_profit_num} >= a.profit_num
+			]]>
+		</if>
+		<if test="min_profit_num !=null">
+			<![CDATA[
+				and a.profit_num >= #{min_profit_num}
+			]]>
+		</if>
+		<!-- 亏损次数 -->
+		<if test="max_deficit_num !=null">
+			<![CDATA[
+				and #{max_deficit_num} >= a.deficit_num
+			]]>
+		</if>
+		<if test="min_deficit_num !=null">
+			<![CDATA[
+				and a.deficit_num >= #{min_deficit_num}
+			]]>
+		</if>
+		<!-- 盈利金额 -->
+		<if test="max_profit_balance !=null">
+			<![CDATA[
+				and #{max_profit_balance} >= a.profit_balance
+			]]>
+		</if>
+		<if test="min_profit_balance !=null">
+			<![CDATA[
+				and a.profit_balance >= #{min_profit_balance}
+			]]>
+		</if>
+		<!-- 亏损金额 -->
+		<if test="max_deficit_balance !=null">
+			<![CDATA[
+				and #{max_deficit_balance} >= a.deficit_balance
+			]]>
+		</if>
+		<if test="min_deficit_balance !=null">
+			<![CDATA[
+				and a.deficit_balance >= #{min_deficit_balance}
+			]]>
+		</if>
+		<!-- 夏普比率 -->
+		<if test="max_sharpe_val !=null">
+			<![CDATA[
+				and #{max_sharpe_val} >= a.sharpe_val
+			]]>
+		</if>
+		<if test="min_sharpe_val !=null">
+			<![CDATA[
+				and a.sharpe_val >= #{min_sharpe_val}
+			]]>
+		</if>
+		<!-- 信息收益比 -->
+		<if test="max_info_val !=null">
+			<![CDATA[
+				and #{max_info_val} >= a.info_val
+			]]>
+		</if>
+		<if test="min_info_val !=null">
+			<![CDATA[
+				and a.info_val >= #{min_info_val}
+			]]>
+		</if>
+		<!-- 下行风险 -->
+		<if test="max_downside_risk !=null">
+			<![CDATA[
+				and #{max_downside_risk} >= a.downside_risk
+			]]>
+		</if>
+		<if test="min_downside_risk !=null">
+			<![CDATA[
+				and a.downside_risk >= #{min_downside_risk}
+			]]>
+		</if>
+		<!-- 净值增长率 -->
+		<if test="max_net_worth_uprate !=null">
+			<![CDATA[
+				and #{max_net_worth_uprate} >= a.net_worth_uprate
+			]]>
+		</if>
+		<if test="min_net_worth_uprate !=null">
+			<![CDATA[
+				and a.net_worth_uprate >= #{min_net_worth_uprate}
+			]]>
+		</if> 
+		<!-- 净值增长率标准差 -->
+		<if test="max_networth_uprate_stdev !=null">
+			<![CDATA[
+				and #{max_networth_uprate_stdev} >= a.networth_uprate_stdev
+			]]>
+		</if>
+		<if test="min_networth_uprate_stdev !=null">
+			<![CDATA[
+				and a.networth_uprate_stdev >= #{max_networth_uprate_stdev}
+			]]>
+		</if> 
+		<!-- 卖出盈利率 -->
+		<if test="max_sell_earnings_val !=null">
+			<![CDATA[
+				and #{max_sell_earnings_val} >= a.sell_earnings_val
+			]]>
+		</if>
+		<if test="min_sell_earnings_val !=null">
+			<![CDATA[
+				and a.sell_earnings_val >= #{min_sell_earnings_val}
+			]]>
+		</if> 		
+		<!--交易胜率 -->
+		<if test="max_exchange_winratio !=null">
+			<![CDATA[
+				and #{max_exchange_winratio} >= a.exchange_winratio
+			]]>
+		</if>
+		<if test="min_exchange_winratio !=null">
+			<![CDATA[
+				and a.exchange_winratio >= #{min_exchange_winratio}
+			]]>
+		</if> 		
+		<!-- 交易次数 -->
+		<if test="max_exchange_num !=null">
+			<![CDATA[
+				and #{max_exchange_num} >= a.exchange_num
+			]]>
+		</if>
+		<if test="min_exchange_num !=null">
+			<![CDATA[
+				and a.exchange_num >= #{min_exchange_num}
+			]]>
+		</if> 	
+		<!-- 交易换手率 -->
+		<if test="max_exchange_ratio !=null">
+			<![CDATA[
+				and #{max_exchange_ratio} >= a.exchange_ratio
+			]]>
+		</if>
+		<if test="min_exchange_ratio !=null">
+			<![CDATA[
+				and a.exchange_ratio >= #{min_exchange_ratio}
+			]]>
+		</if>			
+		<!-- 集中度(股票只数) -->
+		<if test="max_stock_num !=null">
+			<![CDATA[
+				and #{max_stock_num} >= a.stock_num
+			]]>
+		</if>
+		<if test="min_stock_num !=null">
+			<![CDATA[
+				and a.stock_num >= #{min_stock_num}
+			]]>
+		</if>		
+		<!-- 平均持仓时长 -->
+		<if test="max_stock_day_avg !=null">
+			<![CDATA[
+				and #{max_stock_day_avg} >= a.stock_day_avg
+			]]>
+		</if>
+		<if test="min_stock_day_avg !=null">
+			<![CDATA[
+				and a.stock_day_avg >= #{min_stock_day_avg}
+			]]>
+		</if>			
+		<!-- 回撤恢复时间 -->
+		<if test="max_daynum !=null">
+			<![CDATA[
+				and #{max_daynum} >= a.daynum
+			]]>
+		</if>
+		<if test="min_daynum !=null">
+			<![CDATA[
+				and a.daynum >= #{min_daynum}
+			]]>
+		</if>			
+						
+		order by b.cust_id asc 
+		<![CDATA[
+			)z 
+		where z.row_num < 2)ttt
+		group by ttt.status, ttt.class_id
+		order by class_id asc
+		]]>	
+	</select>
+	
+	<!-- 获取亏损金额 -->
+	<select id="getDeficit_balance" resultType="java.util.HashMap">
+		select count(deficit_balance),class_id,status from 
+		(select cust_id, class_id, period_id, deficit_balance,
+		case when 10 > deficit_balance then '1' 
+			 when deficit_balance BETWEEN 10 and 50 then '2' 
+			 when deficit_balance BETWEEN 50 and 100 then '3' 
+			 when deficit_balance>100 then '4' end as status from
+		(select b.cust_id, b.class_id, b.period_id,COALESCE(a.deficit_balance,0) deficit_balance,
+		row_number() over (partition by b.cust_id) as row_num
+		from accdiag.gfrob_all_data b 
+		left join accdiag.gfrob_pc_all_data a on a.customer_id = b.cust_id and a.period_id = b.period_id	
+		<!-- 股票仓位:accdiag.gfrob_customer_stock_ratio -->	
+		<if test="max_stock_ratio !=null and min_stock_ratio !=null">
+		join (select * from accdiag.gfrob_customer_stock_ratio where 1=1 
+			<if test="max_stock_ratio !=null">
+				<![CDATA[
+					and #{max_stock_ratio} >= stock_ratio
+				]]>
+			</if>
+			<if test="min_stock_ratio !=null">
+				<![CDATA[
+					and stock_ratio >= #{min_stock_ratio}
+				]]>
+			</if> 		
+		)c on b.cust_id = c.customer_id
+		</if>
+		<!-- 平均收益：accdiag.gfrob_classcust_avgprofit -->
+		<if test="(max_my_profit_avg !=null and min_my_profit_avg !=null) or (max_ce_profit_avg !=null and min_ce_profit_avg !=null)"  >
+			left join (select * from accdiag.gfrob_classcust_avgprofit where 1=1
+			<if test="period !=null and period !=''">
+				and period_id =#{period} 
+			</if>
+			<if test="max_my_profit_avg !=null"  >
+				<![CDATA[
+				and #{max_my_profit_avg} >= profit
+				]]>
+			</if>		
+			<if test="min_my_profit_avg !=null"  >
+				<![CDATA[
+				and #{min_my_profit_avg} <= profit
+				]]>
+			</if>		
+			<if test="max_ce_profit_avg !=null"  >
+				<![CDATA[
+				and #{max_ce_profit_avg} >= ce_profit
+				]]>
+			</if>		
+			<if test="min_ce_profit_avg !=null"  >
+				<![CDATA[
+				and #{min_ce_profit_avg} <= ce_profit
+				]]>
+			</if>)e on  b.class_id = e.class_id  and  b.period_id = e.period_id
+		</if>
+		<!-- 风格偏好：gfrob_customer_style_ph -->
+		<if test="(ptype !=null and ptype !='') or (ftype !=null and ftype !='')">
+		join (select gg.* from (select f.* from (select *,row_number() over (partition by cust_id order by busidate desc) as row_num from accdiag.gfrob_customer_style_ph)f where f.row_num = 1)gg
+			 where 1=1 
+			<if test="ptype !=null and ptype !=''">
+				and ptype = #{ptype}
+			</if>
+			<if test="ftype !=null and ftype !=''">
+				and ftype = #{ftype}
+			</if>
+			 )g on g.cust_id = b.cust_id
+		</if>
+		<!-- 行业占比：accdiag.gfrob_cust_indu_percent -->
+		<if test="indu_code !=null and indu_code.size() > 0">
+		left join (select * from accdiag.gfrob_cust_indu_percent where 1=1
+			and j.indu_code in
+        	<foreach item="indu_code" index="index" collection="indu_code" open="(" separator="," close=")">
+             	#{indu_code}
+        	</foreach>)j on j.cust_id = b.cust_id
+        </if>
+        <!-- 最大回撤：gfrob_allcust_max_drawdown -->
+		<if test="max_max_drawdown !=null and min_max_drawdown !=null"  >
+		join (select * from accdiag.gfrob_allcust_max_drawdown where 1=1
+			<if test="period !=null and period !=''">
+				and period_id =#{period} 
+			</if>  
+			<!-- 最大回撤 -->
+			<if test="max_max_drawdown !=null"  >
+				<![CDATA[
+					and #{max_max_drawdown} >= max_drawdown
+				]]>
+			</if>		
+			<if test="min_max_drawdown !=null"  >
+				<![CDATA[
+					and #{min_max_drawdown} <= max_drawdown
+				]]>
+			</if>)k on k.cust_id = b.cust_id and k.period_id = b.period_id
+		</if>
+		where 1=1
+		<if test="period !=null and period !=''">
+			and b.period_id =#{period} 
+		</if>
+		<!-- 周期收益 -->	
+		<if test="max_my_profit !=null"  >
+			<![CDATA[
+				and #{max_my_profit} >= b.my_profit
+			]]>
+		</if>		
+		<if test="min_my_profit !=null"  >
+			<![CDATA[
+				and #{min_my_profit} <= b.my_profit
+			]]>
+		</if>
+		<!-- 进攻能力 -->
+		<if test="max_jgnl_score !=null"  >
+			<![CDATA[
+				and #{max_jgnl_score} >= b.jgnl_score
+			]]>
+		</if>		
+		<if test="min_jgnl_score !=null"  >
+			<![CDATA[
+				and #{min_jgnl_score} <= b.jgnl_score
+			]]>
+		</if>
+		<!-- 防御能力 -->
+		<if test="max_fynl_score !=null"  >
+			<![CDATA[
+				and #{max_fynl_score} >= b.fynl_score
+			]]>
+		</if>		
+		<if test="min_fynl_score !=null"  >
+			<![CDATA[
+				and #{min_fynl_score} <= b.fynl_score
+			]]>
+		</if>
+		<!-- alpha指标 -->
+		<if test="max_alpha_val !=null"  >
+			<![CDATA[
+				and #{max_alpha_val} >= b.alpha_val
+			]]>
+		</if>		
+		<if test="min_alpha_val !=null"  >
+			<![CDATA[
+				and #{min_alpha_val} <= b.alpha_val
+			]]>
+		</if>		
+		<!-- beta指标 -->		
+		<if test="max_beta_val !=null"  >
+			<![CDATA[
+				and #{max_beta_val} >= b.beta_val
+			]]>
+		</if>		
+		<if test="min_beta_val !=null"  >
+			<![CDATA[
+				and #{min_beta_val} <= b.beta_val
+			]]>
+		</if>
+		<!-- 择时能力 -->
+		<if test="max_zsnl_score !=null"  >
+			<![CDATA[
+				and #{max_zsnl_score} >= b.zsnl_score
+			]]>
+		</if>		
+		<if test="min_zsnl_score !=null"  >
+			<![CDATA[
+				and #{min_zsnl_score} <= b.zsnl_score
+			]]>
+		</if>
+		<!-- 择股能力 -->
+		<if test="max_zgnl_score !=null"  >
+			<![CDATA[
+				and #{max_zgnl_score} >= b.zgnl_score
+			]]>
+		</if>		
+		<if test="min_zgnl_score !=null"  >
+			<![CDATA[
+				and #{min_zgnl_score} <= b.zgnl_score
+			]]>
+		</if>		
+		<!-- var指标 -->
+		<if test="max_var_val !=null"  >
+			<![CDATA[
+				and #{max_var_val} >= b.var_val
+			]]>
+		</if>	
+		<if test="min_var_val !=null and min_var_val !='' or min_var_val == 0"  >
+			<![CDATA[
+				and #{min_var_val} <= b.var_val
+			]]>
+		</if>			
+		<!-- 超额胜率 -->
+		<if test="max_cesl_score !=null"  >
+			<![CDATA[
+				and #{max_cesl_score} >= b.cesl_score
+			]]>
+		</if>		
+		<if test="min_cesl_score !=null"  >
+			<![CDATA[
+				and #{min_cesl_score} <= b.cesl_score
+			]]>
+		</if>
+		<!-- 大类收益：股票/债券/基金 -->		
+	    <if test="profit_source !=null and profit_source !=''">
+			and b.source_id = #{profit_source}
+		</if>
+		<!-- 个股查询 -->
+		<if test="prd_name !=null and prd_name !=''">
+			and (b.prd_name1 like #{prd_name} or
+				 b.prd_name2 like #{prd_name} or
+				 b.prd_name3 like #{prd_name} or
+				 b.prd_name4 like #{prd_name} or
+				 b.prd_name5 like #{prd_name} )
+		</if>
+        <!-- 客户类型 -->
+		<if test="class_id !=null and class_id.size() > 0">
+			and b.class_id in
+			<foreach item="class_id" index="index" collection="class_id" open="(" separator="," close=")">
+             	#{class_id}
+        	</foreach>
+		</if>
+		<!-- 行业查询 -->
+		<if test="industry_prd !=null and industry_prd !=''">
+			and (b.industry_prd1 = #{industry_prd} or
+				 b.industry_prd2 = #{industry_prd} or
+				 b.industry_prd3 = #{industry_prd} or
+				 b.industry_prd4 = #{industry_prd} or
+				 b.industry_prd5 = #{industry_prd})
+		</if>
+		<!-- 超额收益 -->
+		<if test="max_ce_profit !=null"  >
+			<![CDATA[
+				and #{max_ce_profit} >= b.ce_profit
+			]]>
+		</if>		
+		<if test="min_ce_profit !=null"  >
+			<![CDATA[
+				and #{min_ce_profit} <= b.ce_profit
+			]]>
+		</if>
+		
+		<!-- 盈利次数 -->
+		<if test="max_profit_num !=null">
+			<![CDATA[
+				and #{max_profit_num} >= a.profit_num
+			]]>
+		</if>
+		<if test="min_profit_num !=null">
+			<![CDATA[
+				and a.profit_num >= #{min_profit_num}
+			]]>
+		</if>
+		<!-- 亏损次数 -->
+		<if test="max_deficit_num !=null">
+			<![CDATA[
+				and #{max_deficit_num} >= a.deficit_num
+			]]>
+		</if>
+		<if test="min_deficit_num !=null">
+			<![CDATA[
+				and a.deficit_num >= #{min_deficit_num}
+			]]>
+		</if>
+		<!-- 盈利金额 -->
+		<if test="max_profit_balance !=null">
+			<![CDATA[
+				and #{max_profit_balance} >= a.profit_balance
+			]]>
+		</if>
+		<if test="min_profit_balance !=null">
+			<![CDATA[
+				and a.profit_balance >= #{min_profit_balance}
+			]]>
+		</if>
+		<!-- 亏损金额 -->
+		<if test="max_deficit_balance !=null">
+			<![CDATA[
+				and #{max_deficit_balance} >= a.deficit_balance
+			]]>
+		</if>
+		<if test="min_deficit_balance !=null">
+			<![CDATA[
+				and a.deficit_balance >= #{min_deficit_balance}
+			]]>
+		</if>
+		<!-- 夏普比率 -->
+		<if test="max_sharpe_val !=null">
+			<![CDATA[
+				and #{max_sharpe_val} >= a.sharpe_val
+			]]>
+		</if>
+		<if test="min_sharpe_val !=null">
+			<![CDATA[
+				and a.sharpe_val >= #{min_sharpe_val}
+			]]>
+		</if>
+		<!-- 信息收益比 -->
+		<if test="max_info_val !=null">
+			<![CDATA[
+				and #{max_info_val} >= a.info_val
+			]]>
+		</if>
+		<if test="min_info_val !=null">
+			<![CDATA[
+				and a.info_val >= #{min_info_val}
+			]]>
+		</if>
+		<!-- 下行风险 -->
+		<if test="max_downside_risk !=null">
+			<![CDATA[
+				and #{max_downside_risk} >= a.downside_risk
+			]]>
+		</if>
+		<if test="min_downside_risk !=null">
+			<![CDATA[
+				and a.downside_risk >= #{min_downside_risk}
+			]]>
+		</if>
+		<!-- 净值增长率 -->
+		<if test="max_net_worth_uprate !=null">
+			<![CDATA[
+				and #{max_net_worth_uprate} >= a.net_worth_uprate
+			]]>
+		</if>
+		<if test="min_net_worth_uprate !=null">
+			<![CDATA[
+				and a.net_worth_uprate >= #{min_net_worth_uprate}
+			]]>
+		</if> 
+		<!-- 净值增长率标准差 -->
+		<if test="max_networth_uprate_stdev !=null">
+			<![CDATA[
+				and #{max_networth_uprate_stdev} >= a.networth_uprate_stdev
+			]]>
+		</if>
+		<if test="min_networth_uprate_stdev !=null">
+			<![CDATA[
+				and a.networth_uprate_stdev >= #{max_networth_uprate_stdev}
+			]]>
+		</if> 
+		<!-- 卖出盈利率 -->
+		<if test="max_sell_earnings_val !=null">
+			<![CDATA[
+				and #{max_sell_earnings_val} >= a.sell_earnings_val
+			]]>
+		</if>
+		<if test="min_sell_earnings_val !=null">
+			<![CDATA[
+				and a.sell_earnings_val >= #{min_sell_earnings_val}
+			]]>
+		</if> 		
+		<!--交易胜率 -->
+		<if test="max_exchange_winratio !=null">
+			<![CDATA[
+				and #{max_exchange_winratio} >= a.exchange_winratio
+			]]>
+		</if>
+		<if test="min_exchange_winratio !=null">
+			<![CDATA[
+				and a.exchange_winratio >= #{min_exchange_winratio}
+			]]>
+		</if> 		
+		<!-- 交易次数 -->
+		<if test="max_exchange_num !=null">
+			<![CDATA[
+				and #{max_exchange_num} >= a.exchange_num
+			]]>
+		</if>
+		<if test="min_exchange_num !=null">
+			<![CDATA[
+				and a.exchange_num >= #{min_exchange_num}
+			]]>
+		</if> 	
+		<!-- 交易换手率 -->
+		<if test="max_exchange_ratio !=null">
+			<![CDATA[
+				and #{max_exchange_ratio} >= a.exchange_ratio
+			]]>
+		</if>
+		<if test="min_exchange_ratio !=null">
+			<![CDATA[
+				and a.exchange_ratio >= #{min_exchange_ratio}
+			]]>
+		</if>			
+		<!-- 集中度(股票只数) -->
+		<if test="max_stock_num !=null">
+			<![CDATA[
+				and #{max_stock_num} >= a.stock_num
+			]]>
+		</if>
+		<if test="min_stock_num !=null">
+			<![CDATA[
+				and a.stock_num >= #{min_stock_num}
+			]]>
+		</if>		
+		<!-- 平均持仓时长 -->
+		<if test="max_stock_day_avg !=null">
+			<![CDATA[
+				and #{max_stock_day_avg} >= a.stock_day_avg
+			]]>
+		</if>
+		<if test="min_stock_day_avg !=null">
+			<![CDATA[
+				and a.stock_day_avg >= #{min_stock_day_avg}
+			]]>
+		</if>			
+		<!-- 回撤恢复时间 -->
+		<if test="max_daynum !=null">
+			<![CDATA[
+				and #{max_daynum} >= a.daynum
+			]]>
+		</if>
+		<if test="min_daynum !=null">
+			<![CDATA[
+				and a.daynum >= #{min_daynum}
+			]]>
+		</if>			
+						
+		order by b.cust_id asc 
+		<![CDATA[
+			)z 
+		where z.row_num < 2)ttt
+		group by ttt.status, ttt.class_id
+		order by class_id asc
+		]]>	
+	</select>
+			 
+			
+</mapper>

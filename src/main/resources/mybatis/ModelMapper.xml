@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ics.mapper.ModelMapper">
+	<!-- 增加Model -->
+	<insert id="addModel" parameterType="java.util.HashMap">
+		insert into
+		t_model
+		(name,tablename,status)
+		values
+		(#{name},#{tablename},#{status})
+	</insert>
+	<!-- 删除Model -->
+	<delete id="delModel" parameterType="java.util.HashMap">
+		delete from
+		t_model
+		where
+		<if test="id !=null and id !=''">
+		   id = #{id} 
+		</if>
+	</delete>
+	<!-- 更新Model -->
+	<update id="updateModel" parameterType="java.util.HashMap">
+		update
+		t_model set status = #{status} ,tablename =#{tablename},name=#{name} where id=#{id}
+	</update>
+	<!-- 查询Model -->
+	<select id="getModel" resultType="java.util.HashMap">
+		select * from t_model
+	</select>
+</mapper>
