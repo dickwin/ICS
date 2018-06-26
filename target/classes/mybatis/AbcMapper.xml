@@ -4,7 +4,7 @@
 	<!-- 增加Model -->
 	<insert id="addAbc" parameterType="java.util.HashMap">
 		insert into
-		t_1
+		ics_1
 		(id,tet1,tsdgs)
 		values
 		(#{id},#{tet1},#{tsdgs})
@@ -12,7 +12,7 @@
 	<!-- 删除Model -->
 	<delete id="delAbc" parameterType="java.util.HashMap">
 		delete from
-		t_1
+		ics_1
 		where
 		<if test="id !=null and id !=''">
 		   id = #{id} 
@@ -21,10 +21,10 @@
 	<!-- 更新Model -->
 	<update id="updateAbc" parameterType="java.util.HashMap">
 		update
-		t_1 set id=#{id},tet1=#{tet1},tsdgs=#{tsdgs} where id=#{id}
+		ics_1 set id=#{id},tet1=#{tet1},tsdgs=#{tsdgs} where id=#{id}
 	</update>
 	<!-- 查询Model -->
 	<select id="getAbc" resultType="java.util.HashMap">
-		select * from t_1
+		select * from ics_1
 	</select>
 </mapper>

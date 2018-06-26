@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ics.service.TestService;
-import com.ics.vo.Result;
 
 @Controller
 @RequestMapping("/test")
@@ -26,65 +25,62 @@ public class TestController extends BaseController{
 	@RequestMapping(value = "/getTest", method = RequestMethod.GET)
 	@ResponseBody
     public Object getTest() {
-		Result result = new Result(1, null);
+		Map data = new HashMap();
+		data.put("ret","1");
 		try {
 			List rs = test.getTest(paramMap);
-			Map data = new HashMap();
-			data.put("list", rs);
-			result.setData(data);
-			result.setRet(0);
+			data.put("data",rs);
+			data.put("len",rs.size());
+			data.put("ret","0");
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage(), e);
 		}
 
-        return result;
+        return data;
     }
 	
 	@RequestMapping(value = "/addTest", method = RequestMethod.GET)
 	@ResponseBody
     public Object addTest() {
-		Result result = new Result(1, null);
+		Map data = new HashMap();
+		data.put("ret","1");
 		try {
 			int rs = test.addTest(paramMap);
-			Map data = new HashMap();
-			data.put("list", rs);
-			result.setData(data);
-			result.setRet(0);
+			data.put("data", rs);
+			data.put("ret","0");
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage(), e);
 		}
-        return result;
+        return data;
     }
 	
 	@RequestMapping(value = "/delTest", method = RequestMethod.GET)
 	@ResponseBody
     public Object delTest() {
-		Result result = new Result(1, null);
+		Map data = new HashMap();
+		data.put("ret","1");
 		try {
 			int rs = test.delTest(paramMap);
-			Map data = new HashMap();
-			data.put("list", rs);
-			result.setData(data);
-			result.setRet(0);
+			data.put("data", rs);
+			data.put("ret","0");
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage(), e);
 		}
-        return result;
+        return data;
     }
 	
 	@RequestMapping(value = "/updateTest", method = RequestMethod.GET)
 	@ResponseBody
     public Object updateModel() {
-		Result result = new Result(1, null);
+		Map data = new HashMap();
+		data.put("ret","1");
 		try {
 			int rs = test.updateTest(paramMap);
-			Map data = new HashMap();
-			data.put("list", rs);
-			result.setData(data);
-			result.setRet(0);
+			data.put("data", rs);
+			data.put("ret","0");
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage(), e);
 		}
-        return result;
+        return data;
     }
 }

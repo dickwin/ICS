@@ -4,7 +4,7 @@
 	<!-- 增加Template -->
 	<insert id="addTemplate" parameterType="java.util.HashMap">
 		insert into
-		t_Template
+		ics_Template
 		(name,tablename,status)
 		values
 		(#{name},#{tablename},#{status})
@@ -12,7 +12,7 @@
 	<!-- 删除Template -->
 	<delete id="delTemplate" parameterType="java.util.HashMap">
 		delete from
-		t_Template
+		ics_Template
 		where
 		<if test="id !=null and id !=''">
 		   id = #{id} 
@@ -21,11 +21,11 @@
 	<!-- 更新Template -->
 	<update id="updateTemplate" parameterType="java.util.HashMap">
 		update
-		t_Template set status = #{status} ,tablename =#{tablename},name=#{name} where id=#{id}
+		ics_Template set status = #{status} ,tablename =#{tablename},name=#{name} where id=#{id}
 	</update>
 	<!-- 查询Template -->
 	<select id="getTemplate" resultType="java.util.HashMap">
-		select * from t_template where
+		select * from ics_Template where
 		<if test="type !=null and type !=''">
 			type=#{type}
 		</if>

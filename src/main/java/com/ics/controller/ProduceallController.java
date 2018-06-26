@@ -24,8 +24,8 @@ import com.ics.util.utils;
 
 @Controller
 @RequestMapping("/model")
-public class HelloController extends BaseController{
-	private static Logger log = LogManager.getLogger(HelloController.class.getName());
+public class ProduceallController extends BaseController{
+	private static Logger log = LogManager.getLogger(ProduceallController.class.getName());
 
 	@Autowired
 	private ModelService model;
@@ -36,7 +36,7 @@ public class HelloController extends BaseController{
     @Value("${ics.config.mybatdir}")
 	String mybatdir;
     
-	@RequestMapping(value = "/hello", method = RequestMethod.GET)
+	@RequestMapping(value = "/produceall", method = RequestMethod.GET)
 	@ResponseBody
     public Object RunModel() throws FileNotFoundException {
 		//导入写文件类
@@ -114,7 +114,7 @@ public class HelloController extends BaseController{
 	        		columnstrupdate = columnstrupdate+((HashMap)columnslist.get(j)).get("COLUMN_NAME")+"=#{"+((HashMap)columnslist.get(j)).get("COLUMN_NAME")+"},";
 	        		//log.info("columnslist:"+columnslist.get(j));
 	        	}
-	        	log.info("columnslist1:"+columnstrupdate);
+	        	log.info("columnslist1:"+tablename+":"+columnslist);
 	        	columnstr = columnstr.substring(0,columnstr.length()-1);
 	        	columnstrvalue = columnstrvalue.substring(0,columnstrvalue.length()-1);
 	        	columnstrupdate = columnstrupdate.substring(0,columnstrupdate.length()-1);

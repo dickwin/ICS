@@ -4,7 +4,7 @@
 	<!-- 增加Model -->
 	<insert id="addModel" parameterType="java.util.HashMap">
 		insert into
-		t_model
+		ics_model
 		(name,tablename,status)
 		values
 		(#{name},#{tablename},#{status})
@@ -12,7 +12,7 @@
 	<!-- 删除Model -->
 	<delete id="delModel" parameterType="java.util.HashMap">
 		delete from
-		t_model
+		ics_model
 		where
 		<if test="id !=null and id !=''">
 		   id = #{id} 
@@ -21,10 +21,10 @@
 	<!-- 更新Model -->
 	<update id="updateModel" parameterType="java.util.HashMap">
 		update
-		t_model set status = #{status} ,tablename =#{tablename},name=#{name} where id=#{id}
+		ics_model set status = #{status} ,tablename =#{tablename},name=#{name} where id=#{id}
 	</update>
 	<!-- 查询Model -->
 	<select id="getModel" resultType="java.util.HashMap">
-		select * from t_model
+		select * from ics_model
 	</select>
 </mapper>

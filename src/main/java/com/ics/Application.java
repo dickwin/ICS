@@ -52,6 +52,7 @@ public class Application {
      * Start
      */
     public static void main(String[] args) {
+    	org.apache.ibatis.logging.LogFactory.useStdOutLogging();
         SpringApplication.run(Application.class, args);
         logger.info("SpringBoot Start Success");
     }

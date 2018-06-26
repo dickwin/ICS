@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ics.service.ModelService;
-import com.ics.vo.Result;
 
 @Controller
 @RequestMapping("/model")
@@ -26,65 +25,62 @@ public class ModelController extends BaseController{
 	@RequestMapping(value = "/getModel", method = RequestMethod.GET)
 	@ResponseBody
     public Object getModel() {
-		Result result = new Result(1, null);
+		Map data = new HashMap();
+		data.put("ret","1");
 		try {
 			List rs = model.getModel(paramMap);
-			Map data = new HashMap();
-			data.put("list", rs);
-			result.setData(data);
-			result.setRet(0);
+			data.put("data",rs);
+			data.put("len",rs.size());
+			data.put("ret","0");
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage(), e);
 		}
 
-        return result;
+        return data;
     }
 	
 	@RequestMapping(value = "/addModel", method = RequestMethod.GET)
 	@ResponseBody
     public Object addModel() {
-		Result result = new Result(1, null);
+		Map data = new HashMap();
+		data.put("ret","1");
 		try {
 			int rs = model.addModel(paramMap);
-			Map data = new HashMap();
-			data.put("list", rs);
-			result.setData(data);
-			result.setRet(0);
+			data.put("data", rs);
+			data.put("ret","0");
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage(), e);
 		}
-        return result;
+        return data;
     }
 	
 	@RequestMapping(value = "/delModel", method = RequestMethod.GET)
 	@ResponseBody
     public Object delModel() {
-		Result result = new Result(1, null);
+		Map data = new HashMap();
+		data.put("ret", "1");
 		try {
 			int rs = model.delModel(paramMap);
-			Map data = new HashMap();
-			data.put("list", rs);
-			result.setData(data);
-			result.setRet(0);
+			data.put("data", rs);
+			data.put("ret","0");
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage(), e);
 		}
-        return result;
+        return data;
     }
 	
 	@RequestMapping(value = "/updateModel", method = RequestMethod.GET)
 	@ResponseBody
     public Object updateModel() {
-		Result result = new Result(1, null);
+		Map data = new HashMap();
+		data.put("ret","1");
 		try {
 			int rs = model.updateModel(paramMap);
-			Map data = new HashMap();
-			data.put("list", rs);
-			result.setData(data);
-			result.setRet(0);
+			data.put("data", rs);
+			data.put("ret","0");
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage(), e);
 		}
-        return result;
+        return data;
     }
 }
